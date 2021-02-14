@@ -14,7 +14,6 @@ import com.adhafajri.moviecatalog.utils.Constant
 import com.adhafajri.moviecatalog.utils.Data
 
 class MovieFragment : Fragment() {
-
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
 
     override fun onCreateView(

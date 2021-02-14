@@ -1,4 +1,4 @@
-package com.adhafajri.moviecatalog.ui.movie
+package com.adhafajri.moviecatalog.ui.show
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -10,8 +10,7 @@ import com.adhafajri.moviecatalog.databinding.ItemsCatalogBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
-class
-MovieAdapter : RecyclerView.Adapter<MovieAdapter.CatalogViewHolder>() {
+class ShowAdapter : RecyclerView.Adapter<ShowAdapter.CatalogViewHolder>() {
     private var listCatalogs = ArrayList<CatalogEntity>()
 
     fun setCatalogs(catalog: List<CatalogEntity>?) {
