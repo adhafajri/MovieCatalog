@@ -2,18 +2,13 @@ package com.adhafajri.moviecatalog.utils
 
 import com.adhafajri.moviecatalog.data.CatalogEntity
 
-class Data {
-
-    companion object {
-        private const val movies = "Movies"
-        private const val shows = "Shows"
-    }
+object Data {
 
     fun generateCatalogs(type: String): ArrayList<CatalogEntity> {
         val catalogs = ArrayList<CatalogEntity>()
 
         when (type) {
-            movies -> {
+            Constant.MOVIES -> {
                 catalogs.add(CatalogEntity("m1",
                     "The Godfather",
                     "1972",
@@ -60,7 +55,7 @@ class Data {
                     "Lana Wachowski, Lilly Wachowski",
                     "Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss"))
             }
-            shows -> {
+            Constant.SHOWS -> {
                 catalogs.add(CatalogEntity("s1",
                     "The Falcon and the Winter Soldier",
                     "2021",
