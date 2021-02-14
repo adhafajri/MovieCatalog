@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.adhafajri.moviecatalog.R
 import com.adhafajri.moviecatalog.data.CatalogEntity
 import com.adhafajri.moviecatalog.databinding.ItemsCatalogBinding
+import com.adhafajri.moviecatalog.ui.detail.DetailActivity
+import com.adhafajri.moviecatalog.utils.Constant
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
@@ -36,6 +38,11 @@ MovieAdapter : RecyclerView.Adapter<MovieAdapter.CatalogViewHolder>() {
         fun bind(catalog: CatalogEntity) {
             with(binding) {
                 tvItemTitle.text = catalog.title
+                itemView.setOnClickListener {
+                    val intent = Intent(itemView.context, DetailActivity::class.java)
+                    intent.putExtra(Constant.EXTRA_CATALOG, catalog.catalogId)
+                    itemView.context.startActivity(intent)
+                }
                 Glide.with(itemView.context)
                         .load(catalog.posterPath)
                         .apply(RequestOptions.placeholderOf(R.drawable.ic_loading)

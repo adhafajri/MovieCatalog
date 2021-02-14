@@ -11,6 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieCatalog">
+        <activity android:name=".ui.detail.DetailActivity"
+            android:label="Detail Catalog"
+            android:parentActivityName=".ui.home.HomeActivity"
+            android:theme="@style/Theme.MovieCatalog.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.home.HomeActivity" />
+        </activity>
         <activity android:name=".ui.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
