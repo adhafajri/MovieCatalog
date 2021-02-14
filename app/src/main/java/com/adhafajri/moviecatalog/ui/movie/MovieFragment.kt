@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +28,9 @@ class MovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
-            val catalogs = Data.generateCatalogs(Constant.MOVIES)
+            val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MovieViewModel::class.java]
+            val catalogs = viewModel.getMovieCatalogs()
+
             val movieAdapter = MovieAdapter()
             movieAdapter.setCatalogs(catalogs)
 
