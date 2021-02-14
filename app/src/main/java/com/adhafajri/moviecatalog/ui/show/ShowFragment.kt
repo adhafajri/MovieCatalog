@@ -31,13 +31,13 @@ class ShowFragment : Fragment() {
         if (activity != null) {
             val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[ShowViewModel::class.java]
             val catalogs = viewModel.getShowCatalogs()
-            val movieAdapter = MovieAdapter()
-            movieAdapter.setCatalogs(catalogs)
+            val showAdapter = ShowAdapter()
+            showAdapter.setCatalogs(catalogs)
 
             with(fragmentShowBinding.rvShow) {
                 layoutManager = GridLayoutManager(context, Constant.GRID_SPAN_COUNT)
                 setHasFixedSize(true)
-                adapter = movieAdapter
+                adapter = showAdapter
             }
         }
     }
