@@ -40,7 +40,8 @@ MovieAdapter : RecyclerView.Adapter<MovieAdapter.CatalogViewHolder>() {
                 tvItemTitle.text = catalog.title
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, DetailActivity::class.java)
-                    intent.putExtra(Constant.EXTRA_CATALOG, catalog.catalogId)
+                    intent.putExtra(Constant.EXTRA_CATALOG_ID, catalog.catalogId)
+                    intent.putExtra(Constant.EXTRA_TYPE, Constant.MOVIES)
                     itemView.context.startActivity(intent)
                 }
                 Glide.with(itemView.context)
