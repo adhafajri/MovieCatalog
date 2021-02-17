@@ -2,10 +2,10 @@ package com.adhafajri.moviecatalog.ui.detail
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.adhafajri.moviecatalog.R
 import com.adhafajri.moviecatalog.data.CatalogEntity
@@ -29,7 +29,10 @@ class DetailActivity : AppCompatActivity() {
         setSupportActionBar(activityDetailBinding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[DetailViewModel::class.java]
+        val viewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[DetailViewModel::class.java]
 
         val extras = intent.extras
         if (extras != null) {
@@ -80,7 +83,8 @@ class DetailActivity : AppCompatActivity() {
             .load(catalogEntity.posterPath)
             .apply(
                 RequestOptions.placeholderOf(R.drawable.ic_loading)
-                .error(R.drawable.ic_error))
+                    .error(R.drawable.ic_error)
+            )
             .into(detailContentBinding.imgPoster)
 
         detailContentBinding.btnTrailer.setOnClickListener {

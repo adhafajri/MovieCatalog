@@ -23,7 +23,8 @@ MovieAdapter : RecyclerView.Adapter<MovieAdapter.CatalogViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatalogViewHolder {
-        val itemsCatalogBinding = ItemsCatalogBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val itemsCatalogBinding =
+            ItemsCatalogBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CatalogViewHolder(itemsCatalogBinding)
     }
 
@@ -34,7 +35,8 @@ MovieAdapter : RecyclerView.Adapter<MovieAdapter.CatalogViewHolder>() {
 
     override fun getItemCount(): Int = listCatalogs.size
 
-    class CatalogViewHolder(private val binding: ItemsCatalogBinding) : RecyclerView.ViewHolder(binding.root) {
+    class CatalogViewHolder(private val binding: ItemsCatalogBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(catalog: CatalogEntity) {
             with(binding) {
                 tvItemTitle.text = catalog.title
@@ -45,10 +47,12 @@ MovieAdapter : RecyclerView.Adapter<MovieAdapter.CatalogViewHolder>() {
                     itemView.context.startActivity(intent)
                 }
                 Glide.with(itemView.context)
-                        .load(catalog.posterPath)
-                        .apply(RequestOptions.placeholderOf(R.drawable.ic_loading)
-                                .error(R.drawable.ic_error))
-                        .into(imgPoster)
+                    .load(catalog.posterPath)
+                    .apply(
+                        RequestOptions.placeholderOf(R.drawable.ic_loading)
+                            .error(R.drawable.ic_error)
+                    )
+                    .into(imgPoster)
             }
         }
     }

@@ -9,7 +9,8 @@ import com.adhafajri.moviecatalog.R
 import com.adhafajri.moviecatalog.ui.movie.MovieFragment
 import com.adhafajri.moviecatalog.ui.show.ShowFragment
 
-class SectionPagerAdapter(private val mContext: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class SectionPagerAdapter(private val mContext: Context, fm: FragmentManager) :
+    FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     companion object {
         @StringRes
@@ -17,13 +18,14 @@ class SectionPagerAdapter(private val mContext: Context, fm: FragmentManager) : 
     }
 
     override fun getItem(position: Int): Fragment =
-            when (position) {
-                0 -> MovieFragment()
-                1 -> ShowFragment()
-                else -> Fragment()
-            }
+        when (position) {
+            0 -> MovieFragment()
+            1 -> ShowFragment()
+            else -> Fragment()
+        }
 
-    override fun getPageTitle(position: Int): CharSequence? = mContext.resources.getString(TAB_TITLES[position])
+    override fun getPageTitle(position: Int): CharSequence =
+        mContext.resources.getString(TAB_TITLES[position])
 
     override fun getCount(): Int = TAB_TITLES.size
 }

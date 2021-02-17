@@ -1,8 +1,7 @@
 package com.adhafajri.moviecatalog.ui.home
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.adhafajri.moviecatalog.R
+import androidx.appcompat.app.AppCompatActivity
 import com.adhafajri.moviecatalog.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {

@@ -2,10 +2,10 @@ package com.adhafajri.moviecatalog.ui.detail
 
 import com.adhafajri.moviecatalog.utils.Constant
 import com.adhafajri.moviecatalog.utils.Data
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Test
 
 class DetailViewModelTest {
     private lateinit var viewModel: DetailViewModel
