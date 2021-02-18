@@ -89,7 +89,7 @@
         tools:text="2021" />
 
     <TextView
-        android:id="@+id/tv_synopsis"
+        android:id="@+id/tv_overview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -101,78 +101,24 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_year" />
 
     <TextView
-        android:id="@+id/tv_synopsis_text"
+        android:id="@+id/tv_overview_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_synopsis" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_overview" />
 
-    <TextView
-        android:id="@+id/tv_directors"
-        android:layout_width="0dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_person"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/directors"
-        android:textColor="@color/red_700"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_synopsis_text" />
-
-    <TextView
-        android:id="@+id/tv_directors_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:textSize="14sp"
+        android:clipToPadding="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_directors"
-        app:layout_constraintTop_toTopOf="@+id/tv_directors" />
-
-    <TextView
-        android:id="@+id/tv_writers"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/writers"
-        android:textColor="@color/red_700"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/tv_directors_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_directors_text" />
-
-    <TextView
-        android:id="@+id/tv_writers_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_writers"
-        app:layout_constraintTop_toTopOf="@+id/tv_writers" />
-    <TextView
-        android:id="@+id/tv_stars"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/stars"
-        android:textColor="@color/red_700"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/tv_directors_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_writers_text" />
-
-    <TextView
-        android:id="@+id/tv_stars_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_stars"
-        app:layout_constraintTop_toTopOf="@+id/tv_stars" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_overview_text"
+        tools:listitem="@layout/items_person" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

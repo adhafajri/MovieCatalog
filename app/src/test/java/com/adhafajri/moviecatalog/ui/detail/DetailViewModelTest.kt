@@ -10,11 +10,8 @@ import org.junit.Test
 class DetailViewModelTest {
     private lateinit var viewModel: DetailViewModel
 
-    private val dummyMovieCatalog = Data.generateCatalogs(Constant.MOVIES)[0]
-    private val movieCatalogId = dummyMovieCatalog.catalogId
-
-    private val dummyShowCatalog = Data.generateCatalogs(Constant.SHOWS)[0]
-    private val showCatalogId = dummyShowCatalog.catalogId
+    private val dummyCatalog = Data.generateCatalogs()[0]
+    private val catalogId = dummyCatalog.catalogId
 
     @Before
     fun setUp() {
@@ -23,33 +20,14 @@ class DetailViewModelTest {
 
     @Test
     fun getMovieCatalog() {
-        viewModel.setSelectedCatalog(movieCatalogId, Constant.MOVIES)
+        viewModel.setSelectedCatalog(catalogId)
         val movieCatalogEntity = viewModel.getCatalog()
         assertNotNull(movieCatalogEntity)
-        assertEquals(dummyMovieCatalog.catalogId, movieCatalogEntity?.catalogId)
-        assertEquals(dummyMovieCatalog.title, movieCatalogEntity?.title)
-        assertEquals(dummyMovieCatalog.year, movieCatalogEntity?.year)
-        assertEquals(dummyMovieCatalog.posterPath, movieCatalogEntity?.posterPath)
-        assertEquals(dummyMovieCatalog.trailerPath, movieCatalogEntity?.trailerPath)
-        assertEquals(dummyMovieCatalog.synopsis, movieCatalogEntity?.synopsis)
-        assertEquals(dummyMovieCatalog.directors, movieCatalogEntity?.directors)
-        assertEquals(dummyMovieCatalog.writers, movieCatalogEntity?.writers)
-        assertEquals(dummyMovieCatalog.stars, movieCatalogEntity?.stars)
-    }
-
-    @Test
-    fun getShowCatalog() {
-        viewModel.setSelectedCatalog(showCatalogId, Constant.SHOWS)
-        val showCatalogEntity = viewModel.getCatalog()
-        assertNotNull(showCatalogEntity)
-        assertEquals(dummyShowCatalog.catalogId, showCatalogEntity?.catalogId)
-        assertEquals(dummyShowCatalog.title, showCatalogEntity?.title)
-        assertEquals(dummyShowCatalog.year, showCatalogEntity?.year)
-        assertEquals(dummyShowCatalog.posterPath, showCatalogEntity?.posterPath)
-        assertEquals(dummyShowCatalog.trailerPath, showCatalogEntity?.trailerPath)
-        assertEquals(dummyShowCatalog.synopsis, showCatalogEntity?.synopsis)
-        assertEquals(dummyShowCatalog.directors, showCatalogEntity?.directors)
-        assertEquals(dummyShowCatalog.writers, showCatalogEntity?.writers)
-        assertEquals(dummyShowCatalog.stars, showCatalogEntity?.stars)
+        assertEquals(dummyCatalog.catalogId, movieCatalogEntity?.catalogId)
+        assertEquals(dummyCatalog.title, movieCatalogEntity?.title)
+        assertEquals(dummyCatalog.year, movieCatalogEntity?.year)
+        assertEquals(dummyCatalog.posterPath, movieCatalogEntity?.posterPath)
+        assertEquals(dummyCatalog.trailerPath, movieCatalogEntity?.trailerPath)
+        assertEquals(dummyCatalog.overview, movieCatalogEntity?.overview)
     }
 }

@@ -7,10 +7,13 @@ import android.text.TextUtils
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.adhafajri.moviecatalog.R
 import com.adhafajri.moviecatalog.data.CatalogEntity
+import com.adhafajri.moviecatalog.data.PersonEntity
 import com.adhafajri.moviecatalog.databinding.ActivityDetailBinding
 import com.adhafajri.moviecatalog.databinding.ContentDetailBinding
+import com.adhafajri.moviecatalog.ui.movie.MovieAdapter
 import com.adhafajri.moviecatalog.utils.Constant
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -39,48 +42,36 @@ class DetailActivity : AppCompatActivity() {
             val catalogId = extras.getString(Constant.EXTRA_CATALOG_ID)
             val type = extras.getString(Constant.EXTRA_TYPE)
             if (catalogId != null && type != null) {
-                viewModel.setSelectedCatalog(catalogId, type)
-                loadCatalogData(viewModel.getCatalog() as CatalogEntity)
+                viewModel.setSelectedCatalog(catalogId)
+                loadCatalogData(viewModel.getCatalog() as CatalogEntity, viewModel.getPersons() as ArrayList<PersonEntity>)
             }
         }
     }
 
-    private fun loadCatalogData(catalogEntity: CatalogEntity) {
-        supportActionBar?.title = catalogEntity.title
+    private fun loadCatalogData(catalog: CatalogEntity, persons: ArrayList<PersonEntity>) {
+        supportActionBar?.title = catalog.title
 
-        detailContentBinding.tvTitle.text = catalogEntity.title
-        detailContentBinding.tvYear.text = catalogEntity.year
+        detailContentBinding.tvTitle.text = catalog.title
+        detailContentBinding.tvYear.text = catalog.year
 
-        if (TextUtils.isEmpty(catalogEntity.synopsis)) {
-            detailContentBinding.tvSynopsis.visibility = View.GONE
-            detailContentBinding.tvSynopsisText.visibility = View.GONE
+        if (TextUtils.isEmpty(catalog.overview)) {
+            detailContentBinding.tvOverview.visibility = View.GONE
+            detailContentBinding.tvOverviewText.visibility = View.GONE
         } else {
-            detailContentBinding.tvSynopsisText.text = catalogEntity.synopsis
+            detailContentBinding.tvOverviewText.text = catalog.overview
         }
 
-        if (TextUtils.isEmpty(catalogEntity.directors)) {
-            detailContentBinding.tvDirectors.visibility = View.GONE
-            detailContentBinding.tvDirectorsText.visibility = View.GONE
-        } else {
-            detailContentBinding.tvDirectorsText.text = catalogEntity.directors
-        }
+        val detailAdapter = DetailAdapter()
+        detailAdapter.setPersons(persons)
 
-        if (TextUtils.isEmpty(catalogEntity.writers)) {
-            detailContentBinding.tvWriters.visibility = View.GONE
-            detailContentBinding.tvWritersText.visibility = View.GONE
-        } else {
-            detailContentBinding.tvWritersText.text = catalogEntity.writers
-        }
-
-        if (TextUtils.isEmpty(catalogEntity.stars)) {
-            detailContentBinding.tvStars.visibility = View.INVISIBLE
-            detailContentBinding.tvStarsText.visibility = View.INVISIBLE
-        } else {
-            detailContentBinding.tvStarsText.text = catalogEntity.stars
+        with(detailContentBinding.rvPerson) {
+            layoutManager = GridLayoutManager(context, Constant.GRID_SPAN_COUNT)
+            setHasFixedSize(true)
+            adapter = detailAdapter
         }
 
         Glide.with(this)
-            .load(catalogEntity.posterPath)
+            .load(catalog.posterPath)
             .apply(
                 RequestOptions.placeholderOf(R.drawable.ic_loading)
                     .error(R.drawable.ic_error)
@@ -88,7 +79,7 @@ class DetailActivity : AppCompatActivity() {
             .into(detailContentBinding.imgPoster)
 
         detailContentBinding.btnTrailer.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(catalogEntity.trailerPath))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(catalog.trailerPath))
             startActivity(intent)
         }
     }

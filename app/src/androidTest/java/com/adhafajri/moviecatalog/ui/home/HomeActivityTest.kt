@@ -15,8 +15,8 @@ import org.junit.Before
 import org.junit.Test
 
 class HomeActivityTest {
-    private val dummyMovieCatalog = Data.generateCatalogs(Constant.MOVIES)
-    private val dummyShowCatalog = Data.generateCatalogs(Constant.SHOWS)
+    private val dummyMovieCatalog = Data.generateCatalogs()
+    private val dummyShowCatalog = Data.generateCatalogs()
 
     @Before
     fun setup() {
@@ -61,19 +61,10 @@ class HomeActivityTest {
 
         onView(withId(R.id.img_poster)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.tv_synopsis_text)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_synopsis_text)).check(matches(withText(dummyMovieCatalog[0].synopsis)))
+        onView(withId(R.id.tv_overview)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_overview_text)).check(matches(withText(dummyMovieCatalog[0].overview)))
 
         onView(withId(R.id.scrollView)).perform(swipeUp())
-
-        onView(withId(R.id.tv_directors_text)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_directors_text)).check(matches(withText(dummyMovieCatalog[0].directors)))
-
-        onView(withId(R.id.tv_writers_text)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_writers_text)).check(matches(withText(dummyMovieCatalog[0].writers)))
-
-        onView(withId(R.id.tv_stars_text)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_stars_text)).check(matches(withText(dummyMovieCatalog[0].stars)))
 
         onView(withId(R.id.btn_trailer)).perform(click())
     }
