@@ -1,6 +1,7 @@
 package com.adhafajri.moviecatalog.utils
 
 import com.adhafajri.moviecatalog.data.CatalogEntity
+import com.adhafajri.moviecatalog.data.PersonEntity
 
 object Data {
 
@@ -145,5 +146,166 @@ object Data {
         }
 
         return catalogs
+    }
+
+    fun generatePersons(catalogId: String): ArrayList<PersonEntity> {
+        val persons = ArrayList<PersonEntity>()
+
+        persons.add(
+            PersonEntity(
+                "c1p1",
+                "c1",
+                "Francis Ford Coppola"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c1p2",
+                "c1",
+                "Mario Puzo"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c2p1",
+                "c2",
+                "Christopher Nolan"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c3p1",
+                "c3",
+                "Christopher Nolan"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c3p2",
+                "c3",
+                "Bill Finger"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c3p3",
+                "c3",
+                "Bob Kane"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c3p4",
+                "c3",
+                "Jerry Robinson"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c3p5",
+                "c3",
+                "Jonathan Nolan"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c3p6",
+                "c3",
+                "David S. Goyer"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c4p1",
+                "c4",
+                "Irvin Kershner"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c4p2",
+                "c4",
+                "Lawrence Kasdan"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c4p3",
+                "c4",
+                "Leigh Brackett"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c4p4",
+                "c4",
+                "George Lucas"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c5p1",
+                "c5",
+                "Lana Wachowski"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c5p2",
+                "c5",
+                "Lilly Wachowski"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c6p1",
+                "c6",
+                "Malcolm Spellman"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c7p1",
+                "c7",
+                "Jac Schaeffer"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c8p1",
+                "c8",
+                "Craig Mazin"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c9p1",
+                "c9",
+                "David Benioff"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c9p2",
+                "c9",
+                "D. B. Weiss"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c10p1",
+                "c10",
+                "Mark Gatiss"
+            )
+        )
+        persons.add(
+            PersonEntity(
+                "c10p2",
+                "c10",
+                "Steven Moffat"
+            )
+        )
+        
+        return persons
     }
 }
