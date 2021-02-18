@@ -1,6 +1,7 @@
 package com.adhafajri.moviecatalog.utils
 
 import com.adhafajri.moviecatalog.data.CatalogEntity
+import com.adhafajri.moviecatalog.data.PersonEntity
 
 object Data {
 
