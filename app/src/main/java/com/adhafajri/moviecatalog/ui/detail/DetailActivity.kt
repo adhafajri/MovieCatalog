@@ -13,7 +13,6 @@ import com.adhafajri.moviecatalog.data.CatalogEntity
 import com.adhafajri.moviecatalog.data.PersonEntity
 import com.adhafajri.moviecatalog.databinding.ActivityDetailBinding
 import com.adhafajri.moviecatalog.databinding.ContentDetailBinding
-import com.adhafajri.moviecatalog.ui.movie.MovieAdapter
 import com.adhafajri.moviecatalog.utils.Constant
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -43,12 +42,18 @@ class DetailActivity : AppCompatActivity() {
             val type = extras.getString(Constant.EXTRA_TYPE)
             if (catalogId != null && type != null) {
                 viewModel.setSelectedCatalog(catalogId)
-                loadCatalogData(viewModel.getCatalog() as CatalogEntity, viewModel.getPersons() as ArrayList<PersonEntity>)
+                loadCatalogData(
+                    viewModel.getCatalog() as CatalogEntity,
+                    viewModel.getPersons() as ArrayList<PersonEntity>
+                )
             }
         }
     }
 
-    private fun loadCatalogData(catalog: CatalogEntity, persons: ArrayList<PersonEntity>) {
+    private fun loadCatalogData(
+        catalog: CatalogEntity,
+        persons: ArrayList<PersonEntity>
+    ) {
         supportActionBar?.title = catalog.title
 
         detailContentBinding.tvTitle.text = catalog.title
@@ -61,7 +66,7 @@ class DetailActivity : AppCompatActivity() {
             detailContentBinding.tvOverviewText.text = catalog.overview
         }
 
-        val detailAdapter = DetailAdapter()
+        val detailAdapter = DetailPersonAdapter()
         detailAdapter.setPersons(persons)
 
         with(detailContentBinding.rvPerson) {

@@ -9,19 +9,12 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_name"
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingEnd="4dp"
         android:ellipsize="end"
-        android:textSize="14sp"
-        android:textStyle="bold"
+        android:textSize="12sp"
         tools:text="@string/title" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_title"
-        android:clipToPadding="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/items_title" />
 
 </LinearLayout>

@@ -2,6 +2,8 @@ package com.adhafajri.moviecatalog.utils
 
 import com.adhafajri.moviecatalog.data.CatalogEntity
 import com.adhafajri.moviecatalog.data.PersonEntity
+import com.adhafajri.moviecatalog.data.PersonTitleEntity
+import com.adhafajri.moviecatalog.data.TitleEntity
 
 object Data {
 
@@ -130,159 +132,418 @@ object Data {
 
         persons.add(
             PersonEntity(
-                "c1p1",
+                "p1",
                 "c1",
                 "Francis Ford Coppola"
             )
         )
         persons.add(
             PersonEntity(
-                "c1p2",
+                "p2",
                 "c1",
                 "Mario Puzo"
             )
         )
         persons.add(
             PersonEntity(
-                "c2p1",
+                "p3",
                 "c2",
                 "Christopher Nolan"
             )
         )
         persons.add(
             PersonEntity(
-                "c3p1",
+                "p4",
                 "c3",
-                "Christopher Nolan"
+                "Christopher Nolan",
             )
         )
         persons.add(
             PersonEntity(
-                "c3p2",
+                "p5",
                 "c3",
                 "Bill Finger"
             )
         )
         persons.add(
             PersonEntity(
-                "c3p3",
+                "p6",
                 "c3",
                 "Bob Kane"
             )
         )
         persons.add(
             PersonEntity(
-                "c3p4",
+                "p7",
                 "c3",
                 "Jerry Robinson"
             )
         )
         persons.add(
             PersonEntity(
-                "c3p5",
+                "p8",
                 "c3",
                 "Jonathan Nolan"
             )
         )
         persons.add(
             PersonEntity(
-                "c3p6",
+                "p9",
                 "c3",
                 "David S. Goyer"
             )
         )
         persons.add(
             PersonEntity(
-                "c4p1",
+                "p10",
                 "c4",
                 "Irvin Kershner"
             )
         )
         persons.add(
             PersonEntity(
-                "c4p2",
+                "p11",
                 "c4",
                 "Lawrence Kasdan"
             )
         )
         persons.add(
             PersonEntity(
-                "c4p3",
+                "p12",
                 "c4",
                 "Leigh Brackett"
             )
         )
         persons.add(
             PersonEntity(
-                "c4p4",
+                "p13",
                 "c4",
                 "George Lucas"
             )
         )
         persons.add(
             PersonEntity(
-                "c5p1",
+                "p14",
                 "c5",
                 "Lana Wachowski"
             )
         )
         persons.add(
             PersonEntity(
-                "c5p2",
+                "p15",
                 "c5",
                 "Lilly Wachowski"
             )
         )
         persons.add(
             PersonEntity(
-                "c6p1",
+                "p16",
                 "c6",
                 "Malcolm Spellman"
             )
         )
         persons.add(
             PersonEntity(
-                "c7p1",
+                "p17",
                 "c7",
                 "Jac Schaeffer"
             )
         )
         persons.add(
             PersonEntity(
-                "c8p1",
+                "p18",
                 "c8",
                 "Craig Mazin"
             )
         )
         persons.add(
             PersonEntity(
-                "c9p1",
+                "p19",
                 "c9",
                 "David Benioff"
             )
         )
         persons.add(
             PersonEntity(
-                "c9p2",
+                "p20",
                 "c9",
                 "D. B. Weiss"
             )
         )
         persons.add(
             PersonEntity(
-                "c10p1",
+                "p21",
                 "c10",
                 "Mark Gatiss"
             )
         )
         persons.add(
             PersonEntity(
-                "c10p2",
+                "p22",
                 "c10",
                 "Steven Moffat"
             )
         )
-        
+
         return persons
+    }
+
+    fun generatePersonTitles(): ArrayList<PersonTitleEntity> {
+        val personTitles = ArrayList<PersonTitleEntity>()
+
+        personTitles.add(
+            PersonTitleEntity(
+                "pt1",
+                "p1",
+                "t1"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt2",
+                "p1",
+                "t2"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt3",
+                "p2",
+                "t3"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt4",
+                "p2",
+                "t2"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt5",
+                "p3",
+                "t1"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt6",
+                "p3",
+                "t4"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt7",
+                "p4",
+                "t1"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt8",
+                "p4",
+                "t2"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt9",
+                "p4",
+                "t5"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt10",
+                "p5",
+                "t6"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt11",
+                "p6",
+                "t6"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt12",
+                "p7",
+                "t6"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt13",
+                "p8",
+                "t2"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt14",
+                "p9",
+                "t5"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt15",
+                "p10",
+                "t1"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt17",
+                "p11",
+                "t2"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt18",
+                "p12",
+                "t2"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt19",
+                "p13",
+                "t5"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt20",
+                "p14",
+                "t1"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt21",
+                "p14",
+                "t4"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt22",
+                "p15",
+                "t1"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt23",
+                "p15",
+                "t4"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt24",
+                "p16",
+            "t7"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt25",
+                "p17",
+                "t7"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt26",
+                "p18",
+                "t7"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt27",
+                "p19",
+                "t7"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt28",
+                "p20",
+                "t7"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt29",
+                "p21",
+                "t7"
+            )
+        )
+        personTitles.add(
+            PersonTitleEntity(
+                "pt30",
+                "p22",
+                "t7"
+            )
+        )
+
+        return personTitles
+    }
+
+    fun generateTitles(): ArrayList<TitleEntity> {
+        val titles = ArrayList<TitleEntity>()
+
+        titles.add(
+            TitleEntity(
+                "t1",
+                "Directors"
+            )
+        )
+        titles.add(
+            TitleEntity(
+                "t2",
+                "Screenplay"
+            )
+        )
+        titles.add(
+            TitleEntity(
+                "t3",
+                "Novel"
+            )
+        )
+        titles.add(
+            TitleEntity(
+                "t4",
+                "Writer"
+            )
+        )
+        titles.add(
+            TitleEntity(
+                "t5",
+                "Story"
+            )
+        )
+        titles.add(
+            TitleEntity(
+                "t6",
+                "Characters"
+            )
+        )
+        titles.add(
+            TitleEntity(
+                "t7",
+                "Creator"
+            )
+        )
+
+        return titles
     }
 }
