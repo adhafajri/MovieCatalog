@@ -5,7 +5,4 @@
     <string name="title">Title</string>
     <string name="btn_watch_trailer">Watch Trailer</string>
     <string name="synopsis">Synopsis</string>
-    <string name="directors">Directors</string>
-    <string name="writers">Writers</string>
-    <string name="stars">Stars</string>
 </resources>
