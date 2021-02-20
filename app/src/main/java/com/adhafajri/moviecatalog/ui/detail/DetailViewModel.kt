@@ -9,8 +9,6 @@ import com.adhafajri.moviecatalog.utils.Data
 
 class DetailViewModel : ViewModel() {
     private lateinit var catalogId: String
-    private lateinit var personId: String
-    private lateinit var titleId: String
 
     fun setSelectedCatalog(catalogId: String) {
         this.catalogId = catalogId

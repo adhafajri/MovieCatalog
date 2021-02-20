@@ -8,10 +8,8 @@ import com.adhafajri.moviecatalog.data.PersonEntity
 import com.adhafajri.moviecatalog.databinding.ItemsPersonBinding
 import com.adhafajri.moviecatalog.utils.Constant
 
-
 class
 DetailPersonAdapter : RecyclerView.Adapter<DetailPersonAdapter.PersonViewHolder>() {
-
     private var listPersons = ArrayList<PersonEntity>()
 
     fun setPersons(persons: List<PersonEntity>?) {
@@ -27,14 +25,12 @@ DetailPersonAdapter : RecyclerView.Adapter<DetailPersonAdapter.PersonViewHolder>
     }
 
     override fun onBindViewHolder(holder: PersonViewHolder, position: Int) {
-
         val person = listPersons[position]
         holder.bind(person)
     }
 
-    override fun getItemCount(): Int {
-        return listPersons.size
-    }
+    override fun getItemCount(): Int = listPersons.size
+
 
     class PersonViewHolder(private val binding: ItemsPersonBinding) :
         RecyclerView.ViewHolder(binding.root) {

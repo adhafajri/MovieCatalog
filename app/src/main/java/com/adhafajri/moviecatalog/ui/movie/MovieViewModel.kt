@@ -2,7 +2,6 @@ package com.adhafajri.moviecatalog.ui.movie
 
 import androidx.lifecycle.ViewModel
 import com.adhafajri.moviecatalog.data.CatalogEntity
-import com.adhafajri.moviecatalog.data.PersonEntity
 import com.adhafajri.moviecatalog.utils.Constant
 import com.adhafajri.moviecatalog.utils.Data
 

@@ -3,14 +3,10 @@ package com.adhafajri.moviecatalog.ui.detail
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.adhafajri.moviecatalog.data.PersonEntity
 import com.adhafajri.moviecatalog.data.TitleEntity
-import com.adhafajri.moviecatalog.databinding.ItemsPersonBinding
 import com.adhafajri.moviecatalog.databinding.ItemsTitleBinding
 
 class DetailTitleAdapter : RecyclerView.Adapter<DetailTitleAdapter.TitleViewHolder>() {
-
-    private val viewPool = RecyclerView.RecycledViewPool()
     private var listTitles = ArrayList<TitleEntity>()
 
     fun setTitles(titles: List<TitleEntity>?) {
