@@ -39,8 +39,7 @@ class DetailActivity : AppCompatActivity() {
         val extras = intent.extras
         if (extras != null) {
             val catalogId = extras.getString(Constant.EXTRA_CATALOG_ID)
-            val type = extras.getString(Constant.EXTRA_TYPE)
-            if (catalogId != null && type != null) {
+            if (catalogId != null) {
                 viewModel.setSelectedCatalog(catalogId)
                 loadCatalogData(
                     viewModel.getCatalog() as CatalogEntity,
@@ -56,7 +55,7 @@ class DetailActivity : AppCompatActivity() {
     ) {
         supportActionBar?.title = catalog.title
 
-        detailContentBinding.tvTitle.text = catalog.title
+        detailContentBinding.tvCatalogTitle.text = catalog.title
         detailContentBinding.tvYear.text = catalog.year
 
         if (TextUtils.isEmpty(catalog.overview)) {

@@ -1,6 +1,5 @@
 package com.adhafajri.moviecatalog.ui.detail
 
-import com.adhafajri.moviecatalog.utils.Constant
 import com.adhafajri.moviecatalog.utils.Data
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -19,15 +18,23 @@ class DetailViewModelTest {
     }
 
     @Test
-    fun getMovieCatalog() {
+    fun getCatalog() {
         viewModel.setSelectedCatalog(catalogId)
-        val movieCatalogEntity = viewModel.getCatalog()
-        assertNotNull(movieCatalogEntity)
-        assertEquals(dummyCatalog.catalogId, movieCatalogEntity?.catalogId)
-        assertEquals(dummyCatalog.title, movieCatalogEntity?.title)
-        assertEquals(dummyCatalog.year, movieCatalogEntity?.year)
-        assertEquals(dummyCatalog.posterPath, movieCatalogEntity?.posterPath)
-        assertEquals(dummyCatalog.trailerPath, movieCatalogEntity?.trailerPath)
-        assertEquals(dummyCatalog.overview, movieCatalogEntity?.overview)
+        val catalogEntity = viewModel.getCatalog()
+        assertNotNull(catalogEntity)
+        assertEquals(dummyCatalog.catalogId, catalogEntity?.catalogId)
+        assertEquals(dummyCatalog.title, catalogEntity?.title)
+        assertEquals(dummyCatalog.year, catalogEntity?.year)
+        assertEquals(dummyCatalog.posterPath, catalogEntity?.posterPath)
+        assertEquals(dummyCatalog.trailerPath, catalogEntity?.trailerPath)
+        assertEquals(dummyCatalog.overview, catalogEntity?.overview)
+    }
+
+    @Test
+    fun getPersons() {
+        viewModel.setSelectedCatalog(catalogId)
+        val personEntities = viewModel.getPersons()
+        assertNotNull(personEntities)
+        assertEquals(2, personEntities.size)
     }
 }

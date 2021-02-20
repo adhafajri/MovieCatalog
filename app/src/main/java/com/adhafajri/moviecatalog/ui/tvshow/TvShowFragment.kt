@@ -1,4 +1,4 @@
-package com.adhafajri.moviecatalog.ui.show
+package com.adhafajri.moviecatalog.ui.tvshow
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.adhafajri.moviecatalog.databinding.FragmentShowBinding
+import com.adhafajri.moviecatalog.databinding.FragmentTvShowBinding
 import com.adhafajri.moviecatalog.utils.Constant
 
-class ShowFragment : Fragment() {
-    private lateinit var fragmentShowBinding: FragmentShowBinding
+class TvShowFragment : Fragment() {
+    private lateinit var fragmentShowBinding: FragmentTvShowBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        fragmentShowBinding = FragmentShowBinding.inflate(layoutInflater, container, false)
+        fragmentShowBinding = FragmentTvShowBinding.inflate(layoutInflater, container, false)
         return fragmentShowBinding.root
     }
 
@@ -27,9 +27,9 @@ class ShowFragment : Fragment() {
             val viewModel = ViewModelProvider(
                 this,
                 ViewModelProvider.NewInstanceFactory()
-            )[ShowViewModel::class.java]
-            val catalogs = viewModel.getShowCatalogs()
-            val showAdapter = ShowAdapter()
+            )[TvShowViewModel::class.java]
+            val catalogs = viewModel.getTvShowCatalogs()
+            val showAdapter = TvShowAdapter()
             showAdapter.setCatalogs(catalogs)
 
             with(fragmentShowBinding.rvShow) {

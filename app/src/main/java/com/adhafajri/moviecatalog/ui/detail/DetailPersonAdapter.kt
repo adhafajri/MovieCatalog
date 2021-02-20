@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.RecycledViewPool
 import com.adhafajri.moviecatalog.data.PersonEntity
 import com.adhafajri.moviecatalog.databinding.ItemsPersonBinding
 import com.adhafajri.moviecatalog.utils.Constant
@@ -22,18 +21,15 @@ DetailPersonAdapter : RecyclerView.Adapter<DetailPersonAdapter.PersonViewHolder>
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonViewHolder {
-
-            val itemsPersonBinding =
-                ItemsPersonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val itemsPersonBinding =
+            ItemsPersonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PersonViewHolder(itemsPersonBinding)
-
-
     }
 
     override fun onBindViewHolder(holder: PersonViewHolder, position: Int) {
 
-                val person = listPersons[position]
-                holder.bind(person)
+        val person = listPersons[position]
+        holder.bind(person)
     }
 
     override fun getItemCount(): Int {

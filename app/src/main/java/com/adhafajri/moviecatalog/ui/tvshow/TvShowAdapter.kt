@@ -1,4 +1,4 @@
-package com.adhafajri.moviecatalog.ui.show
+package com.adhafajri.moviecatalog.ui.tvshow
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import com.adhafajri.moviecatalog.utils.Constant
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
-class ShowAdapter : RecyclerView.Adapter<ShowAdapter.CatalogViewHolder>() {
+class TvShowAdapter : RecyclerView.Adapter<TvShowAdapter.CatalogViewHolder>() {
     private var listCatalogs = ArrayList<CatalogEntity>()
 
     fun setCatalogs(catalog: List<CatalogEntity>?) {
@@ -42,7 +42,6 @@ class ShowAdapter : RecyclerView.Adapter<ShowAdapter.CatalogViewHolder>() {
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, DetailActivity::class.java)
                     intent.putExtra(Constant.EXTRA_CATALOG_ID, catalog.catalogId)
-                    intent.putExtra(Constant.EXTRA_TYPE, Constant.SHOWS)
                     itemView.context.startActivity(intent)
                 }
                 Glide.with(itemView.context)

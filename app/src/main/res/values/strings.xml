@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MovieCatalog</string>
     <string name="movies">Movies</string>
-    <string name="shows">Shows</string>
+    <string name="shows">TV Shows</string>
     <string name="title">Title</string>
     <string name="btn_watch_trailer">Watch Trailer</string>
     <string name="synopsis">Synopsis</string>

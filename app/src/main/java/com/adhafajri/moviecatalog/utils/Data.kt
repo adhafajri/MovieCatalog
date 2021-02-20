@@ -13,7 +13,7 @@ object Data {
         catalogs.add(
             CatalogEntity(
                 "c1",
-                "movie",
+                Constant.MOVIE,
                 "The Godfather",
                 "1972",
                 "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/iVZ3JAcAjmguGPnRNfWFOtLHOuY.jpg",
@@ -24,7 +24,7 @@ object Data {
         catalogs.add(
             CatalogEntity(
                 "c2",
-                "movie",
+                Constant.MOVIE,
                 "Inception",
                 "2010",
                 "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
@@ -35,7 +35,7 @@ object Data {
         catalogs.add(
             CatalogEntity(
                 "c3",
-                "movie",
+                Constant.MOVIE,
                 "The Dark Knight",
                 "2008",
                 "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
@@ -46,7 +46,7 @@ object Data {
         catalogs.add(
             CatalogEntity(
                 "c4",
-                "movie",
+                Constant.MOVIE,
                 "Star Wars: Episode V - The Empire Strikes Back",
                 "1980",
                 "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/s12hAKDCui6S8GIyRIaz6oKe5OW.jpg",
@@ -57,7 +57,7 @@ object Data {
         catalogs.add(
             CatalogEntity(
                 "c5",
-                "movie",
+                Constant.MOVIE,
                 "The Matrix",
                 "1999",
                 "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
@@ -69,7 +69,7 @@ object Data {
         catalogs.add(
             CatalogEntity(
                 "c6",
-                "tv_show",
+                Constant.TV_SHOW,
                 "The Falcon and the Winter Soldier",
                 "2021",
                 "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/6kbAMLteGO8yyewYau6bJ683sw7.jpg",
@@ -81,7 +81,7 @@ object Data {
         catalogs.add(
             CatalogEntity(
                 "c7",
-                "tv_show",
+                Constant.TV_SHOW,
                 "WandaVision",
                 "2021",
                 "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/glKDfE6btIRcVB5zrjspRIs4r52.jpg",
@@ -93,7 +93,7 @@ object Data {
         catalogs.add(
             CatalogEntity(
                 "c8",
-                "tv_show",
+                Constant.TV_SHOW,
                 "Chernobyl",
                 "2019",
                 "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg",
@@ -104,7 +104,7 @@ object Data {
         catalogs.add(
             CatalogEntity(
                 "c9",
-                "tv_show",
+                Constant.TV_SHOW,
                 "Game of Thrones",
                 "2011",
                 "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/u3bZgnGQ9T01sWNhyveQz0wH0Hl.jpg",
@@ -115,7 +115,7 @@ object Data {
         catalogs.add(
             CatalogEntity(
                 "c10",
-                "tv_show",
+                Constant.TV_SHOW,
                 "Sherlock",
                 "2010",
                 "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/7WTsnHkbA0FaG6R9twfFde0I9hl.jpg",
