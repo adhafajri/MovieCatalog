@@ -10,7 +10,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.adhafajri.moviecatalog.R
-import com.adhafajri.moviecatalog.data.CatalogEntity
+import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
 import com.adhafajri.moviecatalog.utils.Constant
 import com.adhafajri.moviecatalog.utils.Data
 import org.hamcrest.Description

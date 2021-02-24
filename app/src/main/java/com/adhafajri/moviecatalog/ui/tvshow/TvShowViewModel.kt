@@ -1,18 +1,12 @@
 package com.adhafajri.moviecatalog.ui.tvshow
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.adhafajri.moviecatalog.data.CatalogEntity
-import com.adhafajri.moviecatalog.utils.Constant
-import com.adhafajri.moviecatalog.utils.Data
+import com.adhafajri.moviecatalog.data.source.CatalogRepository
+import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
 
-class TvShowViewModel : ViewModel() {
-    fun getTvShowCatalogs(): List<CatalogEntity> {
-        val catalogs = ArrayList<CatalogEntity>()
-        for (catalogEntity in Data.generateCatalogs()) {
-            if (catalogEntity.type == Constant.TV_SHOW) {
-                catalogs.add(catalogEntity)
-            }
-        }
-        return catalogs
-    }
+class TvShowViewModel(private val catalogRepository: CatalogRepository) : ViewModel() {
+    fun getPopularTvShows(): LiveData<List<CatalogEntity>> = catalogRepository.getPopularTvShows()
+    fun getTodayAiringTvShows(): LiveData<List<CatalogEntity>> =
+        catalogRepository.getTodayAiringTvShows()
 }

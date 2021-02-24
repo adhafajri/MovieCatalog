@@ -6,8 +6,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
     android:orientation="vertical"
     android:padding="8dp">
 
@@ -40,6 +38,7 @@
         android:maxLines="1"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:textColor="@color/blue_800"
         tools:text="@string/title" />
 
 </LinearLayout>

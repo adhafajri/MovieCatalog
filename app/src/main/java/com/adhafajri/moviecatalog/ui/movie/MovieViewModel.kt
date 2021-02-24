@@ -1,18 +1,11 @@
 package com.adhafajri.moviecatalog.ui.movie
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.adhafajri.moviecatalog.data.CatalogEntity
-import com.adhafajri.moviecatalog.utils.Constant
-import com.adhafajri.moviecatalog.utils.Data
+import com.adhafajri.moviecatalog.data.source.CatalogRepository
+import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
 
-class MovieViewModel : ViewModel() {
-    fun getMovieCatalogs(): List<CatalogEntity> {
-        val catalogs = ArrayList<CatalogEntity>()
-        for (catalogEntity in Data.generateCatalogs()) {
-            if (catalogEntity.type == Constant.MOVIE) {
-                catalogs.add(catalogEntity)
-            }
-        }
-        return catalogs
-    }
+class MovieViewModel(private val catalogRepository: CatalogRepository) : ViewModel() {
+    fun getPopularMovies(): LiveData<List<CatalogEntity>> = catalogRepository.getPopularMovies()
+    fun getUpcomingMovies(): LiveData<List<CatalogEntity>> = catalogRepository.getUpcomingMovies()
 }

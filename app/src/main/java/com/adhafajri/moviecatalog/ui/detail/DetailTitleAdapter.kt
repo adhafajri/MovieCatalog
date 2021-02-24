@@ -3,16 +3,16 @@ package com.adhafajri.moviecatalog.ui.detail
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.adhafajri.moviecatalog.data.TitleEntity
+import com.adhafajri.moviecatalog.data.source.local.entity.PersonJobEntity
 import com.adhafajri.moviecatalog.databinding.ItemsTitleBinding
 
 class DetailTitleAdapter : RecyclerView.Adapter<DetailTitleAdapter.TitleViewHolder>() {
-    private var listTitles = ArrayList<TitleEntity>()
+    private var listTitles = ArrayList<PersonJobEntity>()
 
-    fun setTitles(titles: List<TitleEntity>?) {
-        if (titles == null) return
+    fun setJobs(jobs: List<PersonJobEntity>?) {
+        if (jobs == null) return
         this.listTitles.clear()
-        this.listTitles.addAll(titles)
+        this.listTitles.addAll(jobs)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TitleViewHolder {
@@ -33,9 +33,9 @@ class DetailTitleAdapter : RecyclerView.Adapter<DetailTitleAdapter.TitleViewHold
 
     class TitleViewHolder(private val binding: ItemsTitleBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(title: TitleEntity) {
+        fun bind(person: PersonJobEntity) {
             with(binding) {
-                tvTitle.text = title.title
+                tvTitle.text = person.job
             }
         }
     }

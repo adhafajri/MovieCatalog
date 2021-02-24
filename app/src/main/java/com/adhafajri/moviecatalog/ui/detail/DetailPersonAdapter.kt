@@ -2,17 +2,16 @@ package com.adhafajri.moviecatalog.ui.detail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.adhafajri.moviecatalog.data.PersonEntity
+import com.adhafajri.moviecatalog.data.source.local.entity.CreditEntity
 import com.adhafajri.moviecatalog.databinding.ItemsPersonBinding
-import com.adhafajri.moviecatalog.utils.Constant
 
 class
 DetailPersonAdapter : RecyclerView.Adapter<DetailPersonAdapter.PersonViewHolder>() {
-    private var listPersons = ArrayList<PersonEntity>()
+    private var listPersons = ArrayList<CreditEntity>()
 
-    fun setPersons(persons: List<PersonEntity>?) {
+    fun setPersons(persons: List<CreditEntity>?) {
         if (persons == null) return
         this.listPersons.clear()
         this.listPersons.addAll(persons)
@@ -31,18 +30,18 @@ DetailPersonAdapter : RecyclerView.Adapter<DetailPersonAdapter.PersonViewHolder>
 
     override fun getItemCount(): Int = listPersons.size
 
-
     class PersonViewHolder(private val binding: ItemsPersonBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(person: PersonEntity) {
+        fun bind(credit: CreditEntity) {
             with(binding) {
-                tvName.text = person.name
+                tvName.text = credit.person.name
 
                 val detailTitleAdapter = DetailTitleAdapter()
-                detailTitleAdapter.setTitles(person.titles)
+                detailTitleAdapter.setJobs(credit.personsJob)
 
                 with(rvTitle) {
-                    layoutManager = GridLayoutManager(context, Constant.GRID_SPAN_COUNT)
+                    layoutManager =
+                        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                     setHasFixedSize(true)
                     adapter = detailTitleAdapter
                 }

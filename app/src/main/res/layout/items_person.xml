@@ -5,6 +5,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
     android:orientation="vertical">
 
     <TextView
@@ -14,6 +16,7 @@
         android:ellipsize="end"
         android:textSize="14sp"
         android:textStyle="bold"
+        android:textColor="@color/blue_800"
         tools:text="@string/title" />
 
     <androidx.recyclerview.widget.RecyclerView

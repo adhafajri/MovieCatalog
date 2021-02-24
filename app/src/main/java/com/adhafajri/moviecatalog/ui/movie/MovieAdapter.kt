@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.adhafajri.moviecatalog.R
-import com.adhafajri.moviecatalog.data.CatalogEntity
+import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
 import com.adhafajri.moviecatalog.databinding.ItemsCatalogBinding
 import com.adhafajri.moviecatalog.ui.detail.DetailActivity
 import com.adhafajri.moviecatalog.utils.Constant
@@ -43,6 +43,7 @@ MovieAdapter : RecyclerView.Adapter<MovieAdapter.CatalogViewHolder>() {
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, DetailActivity::class.java)
                     intent.putExtra(Constant.EXTRA_CATALOG_ID, catalog.catalogId)
+                    intent.putExtra(Constant.EXTRA_TYPE, catalog.type)
                     itemView.context.startActivity(intent)
                 }
                 Glide.with(itemView.context)

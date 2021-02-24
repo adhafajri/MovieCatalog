@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.adhafajri.moviecatalog.databinding.FragmentMovieBinding
-import com.adhafajri.moviecatalog.utils.Constant
+import com.adhafajri.moviecatalog.viewmodel.ViewModelFactory
 
 class MovieFragment : Fragment() {
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
@@ -24,20 +24,46 @@ class MovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
+            val factory = ViewModelFactory.getInstance()
             val viewModel = ViewModelProvider(
                 this,
-                ViewModelProvider.NewInstanceFactory()
+                factory
             )[MovieViewModel::class.java]
-            val catalogs = viewModel.getMovieCatalogs()
 
-            val movieAdapter = MovieAdapter()
-            movieAdapter.setCatalogs(catalogs)
+            loadPopularMovies(viewModel)
+            loadUpcomingMovies(viewModel)
+        }
+    }
 
-            with(fragmentMovieBinding.rvMovie) {
-                layoutManager = GridLayoutManager(context, Constant.GRID_SPAN_COUNT)
-                setHasFixedSize(true)
-                adapter = movieAdapter
-            }
+    private fun loadUpcomingMovies(viewModel: MovieViewModel) {
+        val upcomingMovieAdapter = MovieAdapter()
+        fragmentMovieBinding.pbMovieUpcoming.visibility = View.VISIBLE
+        viewModel.getUpcomingMovies().observe(this, {
+            fragmentMovieBinding.pbMovieUpcoming.visibility = View.GONE
+            upcomingMovieAdapter.setCatalogs(it)
+            upcomingMovieAdapter.notifyDataSetChanged()
+        })
+
+        with(fragmentMovieBinding.rvMovieUpcoming) {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+            adapter = upcomingMovieAdapter
+        }
+    }
+
+    private fun loadPopularMovies(viewModel: MovieViewModel) {
+        val popularMovieAdapter = MovieAdapter()
+        fragmentMovieBinding.pbMoviePopular.visibility = View.VISIBLE
+        viewModel.getPopularMovies().observe(this, {
+            fragmentMovieBinding.pbMoviePopular.visibility = View.GONE
+            popularMovieAdapter.setCatalogs(it)
+            popularMovieAdapter.notifyDataSetChanged()
+        })
+
+        with(fragmentMovieBinding.rvMoviePopular) {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+            adapter = popularMovieAdapter
         }
     }
 }

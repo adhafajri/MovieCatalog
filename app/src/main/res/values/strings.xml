@@ -4,5 +4,8 @@
     <string name="tv_shows">TV Shows</string>
     <string name="title">Title</string>
     <string name="btn_watch_trailer">Watch Trailer</string>
-    <string name="synopsis">Synopsis</string>
+    <string name="whats_popular">What\'s Popular</string>
+    <string name="airing_today">Airing Today</string>
+    <string name="upcoming_movies">Upcoming Movies</string>
+    <string name="overview">Overview</string>
 </resources>

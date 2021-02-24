@@ -9,11 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.adhafajri.moviecatalog.R
-import com.adhafajri.moviecatalog.data.CatalogEntity
-import com.adhafajri.moviecatalog.data.PersonEntity
+import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
+import com.adhafajri.moviecatalog.data.source.local.entity.CreditEntity
 import com.adhafajri.moviecatalog.databinding.ActivityDetailBinding
 import com.adhafajri.moviecatalog.databinding.ContentDetailBinding
 import com.adhafajri.moviecatalog.utils.Constant
+import com.adhafajri.moviecatalog.viewmodel.ViewModelFactory
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
@@ -25,46 +26,58 @@ class DetailActivity : AppCompatActivity() {
 
         val activityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
         detailContentBinding = activityDetailBinding.detailContent
-
         setContentView(activityDetailBinding.root)
 
         setSupportActionBar(activityDetailBinding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(
             this,
-            ViewModelProvider.NewInstanceFactory()
+            factory
         )[DetailViewModel::class.java]
 
         val extras = intent.extras
-        if (extras != null) {
-            val catalogId = extras.getString(Constant.EXTRA_CATALOG_ID)
-            if (catalogId != null) {
-                viewModel.setSelectedCatalog(catalogId)
-                loadCatalogData(
-                    viewModel.getCatalog() as CatalogEntity,
-                    viewModel.getPersons() as ArrayList<PersonEntity>
-                )
-            }
+        val catalogId = extras?.getString(Constant.EXTRA_CATALOG_ID)
+        val type = extras?.getString(Constant.EXTRA_TYPE)
+        if (catalogId != null && type != null) {
+            viewModel.setSelectedCatalog(catalogId, type)
+            loadDetails(viewModel)
         }
+
     }
 
-    private fun loadCatalogData(
-        catalog: CatalogEntity,
-        persons: ArrayList<PersonEntity>
-    ) {
-        supportActionBar?.title = catalog.title
+    private fun loadDetails(viewModel: DetailViewModel) {
+        detailContentBinding.pbDetails.visibility = View.VISIBLE
 
-        detailContentBinding.tvCatalogTitle.text = catalog.title
-        detailContentBinding.tvYear.text = catalog.year
+        viewModel.getDetails()?.observe(this, {
+            loadCatalogData(it)
+        })
 
-        if (TextUtils.isEmpty(catalog.overview)) {
-            detailContentBinding.tvOverview.visibility = View.GONE
-            detailContentBinding.tvOverviewText.visibility = View.GONE
-        } else {
-            detailContentBinding.tvOverviewText.text = catalog.overview
-        }
+        viewModel.getCredits()?.observe(this, {
+            loadPersonData(it)
+            detailContentBinding.pbDetails.visibility = View.GONE
+        })
 
+        viewModel.getVideo()?.observe(this, {
+            with(it) {
+                val link = when (site) {
+                    Constant.SITE_YOUTUBE -> "${Constant.YOUTUBE_VIDEO_URL}$key"
+                    Constant.SITE_VIMEO -> "${Constant.VIMEO_VIDEO_URL}$key"
+                    else -> null
+                }
+
+                if (link != null) {
+                    detailContentBinding.btnTrailer.setOnClickListener {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                        startActivity(intent)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun loadPersonData(persons: List<CreditEntity>) {
         val detailAdapter = DetailPersonAdapter()
         detailAdapter.setPersons(persons)
 
@@ -72,6 +85,21 @@ class DetailActivity : AppCompatActivity() {
             layoutManager = GridLayoutManager(context, Constant.GRID_SPAN_COUNT)
             setHasFixedSize(true)
             adapter = detailAdapter
+        }
+    }
+
+    private fun loadCatalogData(
+        catalog: CatalogEntity
+    ) {
+        supportActionBar?.title = catalog.title
+
+        detailContentBinding.tvCatalogTitle.text = catalog.title
+
+        if (TextUtils.isEmpty(catalog.overview)) {
+            detailContentBinding.tvOverview.visibility = View.GONE
+            detailContentBinding.tvOverviewText.visibility = View.GONE
+        } else {
+            detailContentBinding.tvOverviewText.text = catalog.overview
         }
 
         Glide.with(this)
@@ -81,10 +109,5 @@ class DetailActivity : AppCompatActivity() {
                     .error(R.drawable.ic_error)
             )
             .into(detailContentBinding.imgPoster)
-
-        detailContentBinding.btnTrailer.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(catalog.trailerPath))
-            startActivity(intent)
-        }
     }
 }
