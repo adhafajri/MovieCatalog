@@ -10,6 +10,8 @@ import com.adhafajri.moviecatalog.utils.api.APIClient
 import com.adhafajri.moviecatalog.utils.api.APIHelper
 import com.adhafajri.moviecatalog.utils.api.APIInterface
 import com.nhaarman.mockitokotlin2.verify
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertNotNull
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -62,8 +64,8 @@ class MovieViewModelTest {
         `when`(catalogRepository.getPopularMovies()).thenReturn(catalogList)
         val catalogEntities = viewModel.getPopularMovies().value
         verify(catalogRepository).getPopularMovies()
-        Assert.assertNotNull(catalogEntities)
-        Assert.assertEquals(catalogList.value?.size, catalogEntities?.size)
+        assertNotNull(catalogEntities)
+        assertEquals(catalogList.value?.size, catalogEntities?.size)
 
         viewModel.getPopularMovies().observeForever(observer)
         verify(observer).onChanged(movieList)
@@ -91,8 +93,8 @@ class MovieViewModelTest {
         `when`(catalogRepository.getUpcomingMovies()).thenReturn(catalogList)
         val catalogEntities = viewModel.getUpcomingMovies().value
         verify(catalogRepository).getUpcomingMovies()
-        Assert.assertNotNull(catalogEntities)
-        Assert.assertEquals(catalogList.value?.size, catalogEntities?.size)
+        assertNotNull(catalogEntities)
+        assertEquals(catalogList.value?.size, catalogEntities?.size)
 
         viewModel.getUpcomingMovies().observeForever(observer)
         verify(observer).onChanged(movieList)

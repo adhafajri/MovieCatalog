@@ -152,9 +152,9 @@ class DetailViewModelTest {
         val videoEntity = viewModel.getVideo()?.value
         catalogMovieId?.let { verify(catalogRepository).getMovieVideo(it) }
         assertNotNull(videoEntity)
-        assertNotNull(videosTest?.id, videoEntity?.videoId)
-        assertNotNull(videosTest?.key, videoEntity?.key)
-        assertNotNull(videosTest?.site, videoEntity?.site)
+        assertEquals(videosTest?.id, videoEntity?.videoId)
+        assertEquals(videosTest?.key, videoEntity?.key)
+        assertEquals(videosTest?.site, videoEntity?.site)
 
         viewModel.getVideo()?.observeForever(videoObserver)
         verify(videoObserver).onChanged(video)
@@ -186,9 +186,9 @@ class DetailViewModelTest {
         val videoEntity = viewModel.getVideo()?.value
         catalogTvShowId?.let { verify(catalogRepository).getTvShowVideo(it) }
         assertNotNull(videoEntity)
-        assertNotNull(videosTest?.id, videoEntity?.videoId)
-        assertNotNull(videosTest?.key, videoEntity?.key)
-        assertNotNull(videosTest?.site, videoEntity?.site)
+        assertEquals(videosTest?.id, videoEntity?.videoId)
+        assertEquals(videosTest?.key, videoEntity?.key)
+        assertEquals(videosTest?.site, videoEntity?.site)
 
         viewModel.getVideo()?.observeForever(videoObserver)
         verify(videoObserver).onChanged(video)
