@@ -15,6 +15,9 @@ object Constant {
 
     const val EXTRA_CATALOG_ID = "extra_catalog_id"
     const val EXTRA_TYPE = "extra_type"
+    const val EXTRA_TITLE = "extra_title"
+    const val EXTRA_POSTER_PATH = "extra_poster_path"
+    const val EXTRA_OVERVIEW = "extra_overview"
 
     const val RESOURCE = "GLOBAL"
 

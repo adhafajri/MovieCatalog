@@ -1,95 +1,70 @@
 package com.adhafajri.moviecatalog.data.source.remote
 
-import android.os.Handler
-import android.os.Looper
-import com.adhafajri.moviecatalog.BuildConfig
-import com.adhafajri.moviecatalog.data.source.remote.response.*
-import com.adhafajri.moviecatalog.utils.Constant
-import com.adhafajri.moviecatalog.utils.EspressoIdlingResource
-import com.adhafajri.moviecatalog.utils.api.APIInterface
-import retrofit2.Callback
+import com.adhafajri.moviecatalog.data.source.remote.response.CreditResponse
+import com.adhafajri.moviecatalog.data.source.remote.response.MoviesResponse
+import com.adhafajri.moviecatalog.data.source.remote.response.TvShowResponse
+import com.adhafajri.moviecatalog.data.source.remote.response.VideoResponse
+import com.adhafajri.moviecatalog.utils.api.APIHelper
 
 class RemoteDataSource private constructor(
-    private val apiInterface: APIInterface
+    private val apiHelper: APIHelper,
 ) {
 
     companion object {
         @Volatile
         private var instance: RemoteDataSource? = null
 
-        fun getInstance(helper: APIInterface): RemoteDataSource =
+        fun getInstance(helper: APIHelper): RemoteDataSource =
             instance ?: synchronized(this) {
                 instance ?: RemoteDataSource(helper)
             }
-
     }
 
-    fun getPopularMovies(callback: Callback<BaseResponse<MoviesResponse>>) {
-        handlerPostDelayed(
-            apiInterface.getPopularMovies(BuildConfig.THE_MOVIE_API_TOKEN).enqueue(callback)
-        )
+    fun getPopularMovies(callback: LoadMoviesCallback) {
+        callback.onAllMoviesReceived(apiHelper.getPopularMovies())
     }
 
-    fun getUpcomingMovies(callback: Callback<BaseResponse<MoviesResponse>>) {
-        handlerPostDelayed(
-            apiInterface.getUpcomingMovies(BuildConfig.THE_MOVIE_API_TOKEN).enqueue(callback)
-        )
+    fun getUpcomingMovies(callback: LoadMoviesCallback) {
+        callback.onAllMoviesReceived(apiHelper.getUpcomingMovies())
     }
 
-    fun getMovieDetails(id: String, callback: Callback<MoviesResponse>) {
-        handlerPostDelayed(
-            apiInterface.getMovieDetails(id, BuildConfig.THE_MOVIE_API_TOKEN).enqueue(callback)
-        )
+    fun getPopularTvShows(callback: LoadTvShowsCallback) {
+        callback.onAllTvShowsReceived(apiHelper.getPopularTvShows())
     }
 
-    fun getMovieCredits(id: String, callback: Callback<BaseResponse<CreditResponse>>) {
-        handlerPostDelayed(
-            apiInterface.getMovieCredits(id, BuildConfig.THE_MOVIE_API_TOKEN).enqueue(callback)
-        )
+    fun getTodayAiringTvShows(callback: LoadTvShowsCallback) {
+        callback.onAllTvShowsReceived(apiHelper.getTodayAiringTvShows())
     }
 
-    fun getMovieVideos(id: String, callback: Callback<BaseResponse<VideoResponse>>) {
-        handlerPostDelayed(
-            apiInterface.getMovieVideos(id, BuildConfig.THE_MOVIE_API_TOKEN).enqueue(callback)
-        )
+    fun getMovieVideos(movieId: String, callback: LoadVideosCallback) {
+        callback.onAllVideosReceived(apiHelper.getMovieVideos(movieId))
     }
 
-    fun getPopularTvShows(callback: Callback<BaseResponse<TvShowResponse>>) {
-        handlerPostDelayed(
-            apiInterface.getPopularTvShows(BuildConfig.THE_MOVIE_API_TOKEN).enqueue(callback)
-        )
+    fun getTvShowVideos(tvShowId: String, callback: LoadVideosCallback) {
+        callback.onAllVideosReceived(apiHelper.getTvShowsVideos(tvShowId))
     }
 
-    fun getTodayAiringTvShows(callback: Callback<BaseResponse<TvShowResponse>>) {
-        handlerPostDelayed(
-            apiInterface.getTodayAiringTvShows(BuildConfig.THE_MOVIE_API_TOKEN).enqueue(callback)
-        )
+    fun getMovieCredits(movieId: String, callback: LoadCreditsCallback) {
+        callback.onAllCreditsReceived(apiHelper.getMovieCredits(movieId))
     }
 
-    fun getTvShowDetails(id: String, callback: Callback<TvShowResponse>) {
-        handlerPostDelayed(
-            apiInterface.getTvShowDetails(id, BuildConfig.THE_MOVIE_API_TOKEN).enqueue(callback)
-        )
+    fun getTvShowCredits(tvShowId: String, callback: LoadCreditsCallback) {
+        callback.onAllCreditsReceived(apiHelper.getTvShowCredits(tvShowId))
     }
 
-    fun getTvShowCredits(id: String, callback: Callback<BaseResponse<CreditResponse>>) {
-        handlerPostDelayed(
-            apiInterface.getTvShowCredits(id, BuildConfig.THE_MOVIE_API_TOKEN).enqueue(callback)
-        )
+    interface LoadMoviesCallback {
+        fun onAllMoviesReceived(moviesResponse: List<MoviesResponse>?)
     }
 
-    fun getTvShowVideos(id: String, callback: Callback<BaseResponse<VideoResponse>>) {
-        handlerPostDelayed(
-            apiInterface.getTvShowVideos(id, BuildConfig.THE_MOVIE_API_TOKEN).enqueue(callback)
-        )
+    interface LoadTvShowsCallback {
+        fun onAllTvShowsReceived(tvShowResponse: List<TvShowResponse>?)
     }
 
-    private fun handlerPostDelayed(enqueue: Unit) {
-        EspressoIdlingResource.increment()
+    interface LoadVideosCallback {
+        fun onAllVideosReceived(videosResponse: List<VideoResponse>?)
+    }
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            enqueue
-            EspressoIdlingResource.decrement()
-        }, Constant.SERVICE_LATENCY_IN_MILLIS)
+    interface LoadCreditsCallback {
+        fun onAllCreditsReceived(creditResponse: List<CreditResponse>?)
     }
 }

@@ -15,7 +15,7 @@ class TvShowFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         fragmentTvShowBinding = FragmentTvShowBinding.inflate(layoutInflater, container, false)
         return fragmentTvShowBinding.root
@@ -32,7 +32,6 @@ class TvShowFragment : Fragment() {
 
             loadPopularTvShows(viewModel)
             loadUpcomingTvShows(viewModel)
-
         }
     }
 

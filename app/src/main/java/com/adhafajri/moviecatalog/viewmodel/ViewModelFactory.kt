@@ -2,7 +2,7 @@ package com.adhafajri.moviecatalog.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.adhafajri.moviecatalog.data.source.CatalogRepository
+import com.adhafajri.moviecatalog.data.CatalogRepository
 import com.adhafajri.moviecatalog.di.Injection
 import com.adhafajri.moviecatalog.ui.detail.DetailViewModel
 import com.adhafajri.moviecatalog.ui.movie.MovieViewModel

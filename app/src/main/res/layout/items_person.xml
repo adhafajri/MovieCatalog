@@ -20,10 +20,10 @@
         tools:text="@string/title" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_title"
+        android:id="@+id/rv_job"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="true"
-        tools:listitem="@layout/items_title" />
+        tools:listitem="@layout/items_job" />
 
 </LinearLayout>

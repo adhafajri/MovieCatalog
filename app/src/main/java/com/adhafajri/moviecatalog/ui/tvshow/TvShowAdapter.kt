@@ -43,6 +43,9 @@ class TvShowAdapter : RecyclerView.Adapter<TvShowAdapter.CatalogViewHolder>() {
                     val intent = Intent(itemView.context, DetailActivity::class.java)
                     intent.putExtra(Constant.EXTRA_CATALOG_ID, catalog.catalogId)
                     intent.putExtra(Constant.EXTRA_TYPE, catalog.type)
+                    intent.putExtra(Constant.EXTRA_TITLE, catalog.title)
+                    intent.putExtra(Constant.EXTRA_OVERVIEW, catalog.overview)
+                    intent.putExtra(Constant.EXTRA_POSTER_PATH, catalog.posterPath)
                     itemView.context.startActivity(intent)
                 }
                 Glide.with(itemView.context)

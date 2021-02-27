@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.adhafajri.moviecatalog.data.source.local.entity.PersonJobEntity
-import com.adhafajri.moviecatalog.databinding.ItemsTitleBinding
+import com.adhafajri.moviecatalog.databinding.ItemsJobBinding
 
-class DetailTitleAdapter : RecyclerView.Adapter<DetailTitleAdapter.TitleViewHolder>() {
+class DetailJobAdapter : RecyclerView.Adapter<DetailJobAdapter.JobViewHolder>() {
     private var listTitles = ArrayList<PersonJobEntity>()
 
     fun setJobs(jobs: List<PersonJobEntity>?) {
@@ -15,13 +15,13 @@ class DetailTitleAdapter : RecyclerView.Adapter<DetailTitleAdapter.TitleViewHold
         this.listTitles.addAll(jobs)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TitleViewHolder {
-        val itemsTitleBinding =
-            ItemsTitleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return TitleViewHolder(itemsTitleBinding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
+        val itemsJobBinding =
+            ItemsJobBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return JobViewHolder(itemsJobBinding)
     }
 
-    override fun onBindViewHolder(holder: TitleViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
 
         val title = listTitles[position]
         holder.bind(title)
@@ -31,7 +31,7 @@ class DetailTitleAdapter : RecyclerView.Adapter<DetailTitleAdapter.TitleViewHold
         return listTitles.size
     }
 
-    class TitleViewHolder(private val binding: ItemsTitleBinding) :
+    class JobViewHolder(private val binding: ItemsJobBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(person: PersonJobEntity) {
             with(binding) {

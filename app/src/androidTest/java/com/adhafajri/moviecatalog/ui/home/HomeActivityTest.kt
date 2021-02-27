@@ -86,8 +86,8 @@ class HomeActivityTest {
             )
         )
 
-        onView(withIndex(withId(R.id.rv_title), 0)).check(matches(isDisplayed()))
-        onView(withIndex(withId(R.id.rv_title), 0)).perform(
+        onView(withIndex(withId(R.id.rv_job), 0)).check(matches(isDisplayed()))
+        onView(withIndex(withId(R.id.rv_job), 0)).perform(
             RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
                 dummyTitles.size
             )

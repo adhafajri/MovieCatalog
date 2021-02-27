@@ -21,6 +21,8 @@ import com.bumptech.glide.request.RequestOptions
 class DetailActivity : AppCompatActivity() {
     private lateinit var detailContentBinding: ContentDetailBinding
 
+    private lateinit var catalog: CatalogEntity
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,19 +42,27 @@ class DetailActivity : AppCompatActivity() {
         val extras = intent.extras
         val catalogId = extras?.getString(Constant.EXTRA_CATALOG_ID)
         val type = extras?.getString(Constant.EXTRA_TYPE)
-        if (catalogId != null && type != null) {
-            viewModel.setSelectedCatalog(catalogId, type)
-            loadDetails(viewModel)
+        val title = extras?.getString(Constant.EXTRA_TITLE)
+        val posterPath = extras?.getString(Constant.EXTRA_POSTER_PATH)
+        val overview = extras?.getString(Constant.EXTRA_OVERVIEW)
+
+        if (catalogId != null && type != null && title != null && posterPath != null && overview != null) {
+            catalog = CatalogEntity(
+                catalogId,
+                type,
+                title,
+                posterPath,
+                overview
+            )
         }
 
+        viewModel.setSelectedCatalog(catalog.catalogId, catalog.type)
+        loadCatalogData()
+        loadDetails(viewModel)
     }
 
     private fun loadDetails(viewModel: DetailViewModel) {
         detailContentBinding.pbDetails.visibility = View.VISIBLE
-
-        viewModel.getDetails()?.observe(this, {
-            loadCatalogData(it)
-        })
 
         viewModel.getCredits()?.observe(this, {
             loadPersonData(it)
@@ -88,9 +98,7 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadCatalogData(
-        catalog: CatalogEntity
-    ) {
+    private fun loadCatalogData() {
         supportActionBar?.title = catalog.title
 
         detailContentBinding.tvCatalogTitle.text = catalog.title

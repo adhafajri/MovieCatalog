@@ -36,14 +36,14 @@ DetailPersonAdapter : RecyclerView.Adapter<DetailPersonAdapter.PersonViewHolder>
             with(binding) {
                 tvName.text = credit.person.name
 
-                val detailTitleAdapter = DetailTitleAdapter()
-                detailTitleAdapter.setJobs(credit.personsJob)
+                val detailJobAdapter = DetailJobAdapter()
+                detailJobAdapter.setJobs(credit.personsJob)
 
-                with(rvTitle) {
+                with(rvJob) {
                     layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                     setHasFixedSize(true)
-                    adapter = detailTitleAdapter
+                    adapter = detailJobAdapter
                 }
             }
         }

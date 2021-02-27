@@ -2,8 +2,7 @@ package com.adhafajri.moviecatalog.ui.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.adhafajri.moviecatalog.data.source.CatalogRepository
-import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
+import com.adhafajri.moviecatalog.data.CatalogRepository
 import com.adhafajri.moviecatalog.data.source.local.entity.CreditEntity
 import com.adhafajri.moviecatalog.data.source.local.entity.VideoEntity
 import com.adhafajri.moviecatalog.utils.Constant
@@ -17,13 +16,13 @@ class DetailViewModel(private val catalogRepository: CatalogRepository) : ViewMo
         this.type = type
     }
 
-    fun getDetails(): LiveData<CatalogEntity>? {
-        return when (type) {
-            Constant.MOVIE -> catalogRepository.getMovieDetails(catalogId)
-            Constant.TV_SHOW -> catalogRepository.getTvShowDetails(catalogId)
-            else -> null
-        }
-    }
+//    fun getDetails(): LiveData<CatalogEntity>? {
+//        return when (type) {
+//            Constant.MOVIE -> catalogRepository.getMovieDetails(catalogId)
+//            Constant.TV_SHOW -> catalogRepository.getTvShowDetails(catalogId)
+//            else -> null
+//        }
+//    }
 
     fun getCredits(): LiveData<List<CreditEntity>>? {
         return when (type) {
