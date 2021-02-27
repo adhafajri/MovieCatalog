@@ -19,9 +19,5 @@ object Constant {
     const val EXTRA_POSTER_PATH = "extra_poster_path"
     const val EXTRA_OVERVIEW = "extra_overview"
 
-    const val RESOURCE = "GLOBAL"
-
-    const val SERVICE_LATENCY_IN_MILLIS: Long = 2000
-
     const val GRID_SPAN_COUNT = 2
 }

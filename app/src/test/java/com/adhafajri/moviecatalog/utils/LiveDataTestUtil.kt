@@ -1,4 +1,4 @@
-package com.dicoding.academies.utils
+package com.adhafajri.moviecatalog.utils
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer

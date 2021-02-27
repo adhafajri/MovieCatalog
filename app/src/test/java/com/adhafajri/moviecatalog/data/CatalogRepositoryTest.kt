@@ -5,7 +5,7 @@ import com.adhafajri.moviecatalog.data.source.remote.RemoteDataSource
 import com.adhafajri.moviecatalog.utils.api.APIClient
 import com.adhafajri.moviecatalog.utils.api.APIHelper
 import com.adhafajri.moviecatalog.utils.api.APIInterface
-import com.dicoding.academies.utils.LiveDataTestUtil
+import com.adhafajri.moviecatalog.utils.LiveDataTestUtil
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.eq

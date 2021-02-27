@@ -5,5 +5,5 @@ data class CatalogEntity(
         var type: String,
         var title: String,
         var posterPath: String,
-        var overview: String
+        var overview: String,
 )
