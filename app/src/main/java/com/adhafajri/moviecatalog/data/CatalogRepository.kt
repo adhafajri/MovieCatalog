@@ -166,7 +166,7 @@ class CatalogRepository private constructor(private val remoteDataSource: Remote
         val creditResults = MutableLiveData<List<CreditEntity>>()
         remoteDataSource.getMovieCredits(movieId, object : RemoteDataSource.LoadCreditsCallback {
             override fun onAllCreditsReceived(creditResponse: List<CreditResponse>?) {
-                val creditList = ArrayList<PersonJobEntity>()
+                val personsJobList = ArrayList<PersonJobEntity>()
                 creditResponse?.forEach {
                     with(it) {
                         val person = PersonJobEntity(
@@ -174,21 +174,20 @@ class CatalogRepository private constructor(private val remoteDataSource: Remote
                             name,
                             job
                         )
-                        creditList.add(person)
+                        personsJobList.add(person)
                     }
                 }
 
-                val personList = ArrayList<CreditEntity>()
-                creditList.groupBy { it.personId }.entries.map { (id, it) ->
-                    personList.add(
+                val creditList = ArrayList<CreditEntity>()
+                personsJobList.groupBy { it.personId }.entries.map { (id, it) ->
+                    creditList.add(
                         CreditEntity(id, PersonEntity(id, it.first().name), it)
                     )
                 }
 
-                creditResults.postValue(personList)
+                creditResults.postValue(creditList)
             }
         })
-
         return creditResults
     }
 
@@ -196,7 +195,7 @@ class CatalogRepository private constructor(private val remoteDataSource: Remote
         val creditResults = MutableLiveData<List<CreditEntity>>()
         remoteDataSource.getTvShowCredits(tvShowId, object : RemoteDataSource.LoadCreditsCallback {
             override fun onAllCreditsReceived(creditResponse: List<CreditResponse>?) {
-                val creditList = ArrayList<PersonJobEntity>()
+                val personsJobList = ArrayList<PersonJobEntity>()
                 creditResponse?.forEach {
                     with(it) {
                         val person = PersonJobEntity(
@@ -204,21 +203,20 @@ class CatalogRepository private constructor(private val remoteDataSource: Remote
                             name,
                             job
                         )
-                        creditList.add(person)
+                        personsJobList.add(person)
                     }
                 }
 
-                val personList = ArrayList<CreditEntity>()
-                creditList.groupBy { it.personId }.entries.map { (id, it) ->
-                    personList.add(
+                val creditList = ArrayList<CreditEntity>()
+                personsJobList.groupBy { it.personId }.entries.map { (id, it) ->
+                    creditList.add(
                         CreditEntity(id, PersonEntity(id, it.first().name), it)
                     )
                 }
 
-                creditResults.postValue(personList)
+                creditResults.postValue(creditList)
             }
         })
-
         return creditResults
     }
 }

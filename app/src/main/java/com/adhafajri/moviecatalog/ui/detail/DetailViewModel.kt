@@ -16,14 +16,6 @@ class DetailViewModel(private val catalogRepository: CatalogRepository) : ViewMo
         this.type = type
     }
 
-//    fun getDetails(): LiveData<CatalogEntity>? {
-//        return when (type) {
-//            Constant.MOVIE -> catalogRepository.getMovieDetails(catalogId)
-//            Constant.TV_SHOW -> catalogRepository.getTvShowDetails(catalogId)
-//            else -> null
-//        }
-//    }
-
     fun getCredits(): LiveData<List<CreditEntity>>? {
         return when (type) {
             Constant.MOVIE -> catalogRepository.getMovieCredits(catalogId)

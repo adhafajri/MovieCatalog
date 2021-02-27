@@ -20,37 +20,29 @@ class RemoteDataSource private constructor(
             }
     }
 
-    fun getPopularMovies(callback: LoadMoviesCallback) {
+    fun getPopularMovies(callback: LoadMoviesCallback) =
         callback.onAllMoviesReceived(apiHelper.getPopularMovies())
-    }
 
-    fun getUpcomingMovies(callback: LoadMoviesCallback) {
+    fun getUpcomingMovies(callback: LoadMoviesCallback) =
         callback.onAllMoviesReceived(apiHelper.getUpcomingMovies())
-    }
 
-    fun getPopularTvShows(callback: LoadTvShowsCallback) {
+    fun getPopularTvShows(callback: LoadTvShowsCallback) =
         callback.onAllTvShowsReceived(apiHelper.getPopularTvShows())
-    }
 
-    fun getTodayAiringTvShows(callback: LoadTvShowsCallback) {
+    fun getTodayAiringTvShows(callback: LoadTvShowsCallback) =
         callback.onAllTvShowsReceived(apiHelper.getTodayAiringTvShows())
-    }
 
-    fun getMovieVideos(movieId: String, callback: LoadVideosCallback) {
+    fun getMovieVideos(movieId: String, callback: LoadVideosCallback) =
         callback.onAllVideosReceived(apiHelper.getMovieVideos(movieId))
-    }
 
-    fun getTvShowVideos(tvShowId: String, callback: LoadVideosCallback) {
+    fun getTvShowVideos(tvShowId: String, callback: LoadVideosCallback) =
         callback.onAllVideosReceived(apiHelper.getTvShowsVideos(tvShowId))
-    }
 
-    fun getMovieCredits(movieId: String, callback: LoadCreditsCallback) {
+    fun getMovieCredits(movieId: String, callback: LoadCreditsCallback) =
         callback.onAllCreditsReceived(apiHelper.getMovieCredits(movieId))
-    }
 
-    fun getTvShowCredits(tvShowId: String, callback: LoadCreditsCallback) {
+    fun getTvShowCredits(tvShowId: String, callback: LoadCreditsCallback) =
         callback.onAllCreditsReceived(apiHelper.getTvShowCredits(tvShowId))
-    }
 
     interface LoadMoviesCallback {
         fun onAllMoviesReceived(moviesResponse: List<MoviesResponse>?)
