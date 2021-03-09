@@ -18,11 +18,12 @@ buildscript {
         materialVersion = '1.3.0'
         recyclerViewVersion = '1.1.0'
         glideVersion = '4.11.0'
-        idleResourceVersion = '3.3.0'
 
         retrofitVersion = '2.6.2'
-
         archLifecycleVersion = '2.2.0'
+        roomRuntimeVersion = '2.2.5'
+        roomVersion = '2.2.3'
+        pagingVersion = '2.1.2'
     }
     repositories {
         google()

@@ -5,13 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adhafajri.moviecatalog.data.source.local.entity.CreditEntity
+import com.adhafajri.moviecatalog.data.source.local.entity.PersonWithJob
 import com.adhafajri.moviecatalog.databinding.ItemsPersonBinding
 
 class
 DetailPersonAdapter : RecyclerView.Adapter<DetailPersonAdapter.PersonViewHolder>() {
-    private var listPersons = ArrayList<CreditEntity>()
+    private var listPersons = ArrayList<PersonWithJob>()
 
-    fun setPersons(persons: List<CreditEntity>?) {
+    fun setPersons(persons: ArrayList<PersonWithJob>) {
         if (persons == null) return
         this.listPersons.clear()
         this.listPersons.addAll(persons)
@@ -32,12 +33,12 @@ DetailPersonAdapter : RecyclerView.Adapter<DetailPersonAdapter.PersonViewHolder>
 
     class PersonViewHolder(private val binding: ItemsPersonBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(credit: CreditEntity) {
+        fun bind(person: PersonWithJob) {
             with(binding) {
-                tvName.text = credit.person.name
+                tvName.text = person.person.name
 
                 val detailJobAdapter = DetailJobAdapter()
-                detailJobAdapter.setJobs(credit.personsJob)
+                detailJobAdapter.setJobs(person.jobs)
 
                 with(rvJob) {
                     layoutManager =

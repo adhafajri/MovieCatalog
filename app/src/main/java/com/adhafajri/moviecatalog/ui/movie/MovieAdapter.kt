@@ -3,6 +3,8 @@ package com.adhafajri.moviecatalog.ui.movie
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adhafajri.moviecatalog.R
 import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
@@ -13,14 +15,27 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
 class
-MovieAdapter : RecyclerView.Adapter<MovieAdapter.CatalogViewHolder>() {
-    private var listCatalogs = ArrayList<CatalogEntity>()
+MovieAdapter : PagedListAdapter<CatalogEntity, MovieAdapter.CatalogViewHolder>(DIFF_CALLBACK) {
 
-    fun setCatalogs(catalog: List<CatalogEntity>?) {
-        if (catalog == null) return
-        this.listCatalogs.clear()
-        this.listCatalogs.addAll(catalog)
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CatalogEntity>() {
+            override fun areItemsTheSame(oldItem: CatalogEntity, newItem: CatalogEntity): Boolean {
+                return oldItem.catalogId == newItem.catalogId
+            }
+
+            override fun areContentsTheSame(oldItem: CatalogEntity, newItem: CatalogEntity): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
+
+//    private var listCatalogs = ArrayList<CatalogEntity>()
+//
+//    fun setCatalogs(catalog: List<CatalogEntity>?) {
+//        if (catalog == null) return
+//        this.listCatalogs.clear()
+//        this.listCatalogs.addAll(catalog)
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatalogViewHolder {
         val itemsCatalogBinding =
@@ -29,11 +44,11 @@ MovieAdapter : RecyclerView.Adapter<MovieAdapter.CatalogViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: CatalogViewHolder, position: Int) {
-        val catalog = listCatalogs[position]
-        holder.bind(catalog)
+        val catalog = getItem(position)
+        if (catalog != null) {
+            holder.bind(catalog)
+        }
     }
-
-    override fun getItemCount(): Int = listCatalogs.size
 
     class CatalogViewHolder(private val binding: ItemsCatalogBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -44,9 +59,9 @@ MovieAdapter : RecyclerView.Adapter<MovieAdapter.CatalogViewHolder>() {
                     val intent = Intent(itemView.context, DetailActivity::class.java)
                     intent.putExtra(Constant.EXTRA_CATALOG_ID, catalog.catalogId)
                     intent.putExtra(Constant.EXTRA_TYPE, catalog.type)
-                    intent.putExtra(Constant.EXTRA_TITLE, catalog.title)
-                    intent.putExtra(Constant.EXTRA_OVERVIEW, catalog.overview)
-                    intent.putExtra(Constant.EXTRA_POSTER_PATH, catalog.posterPath)
+//                    intent.putExtra(Constant.EXTRA_TITLE, catalog.title)
+//                    intent.putExtra(Constant.EXTRA_OVERVIEW, catalog.overview)
+//                    intent.putExtra(Constant.EXTRA_POSTER_PATH, catalog.posterPath)
                     itemView.context.startActivity(intent)
                 }
                 Glide.with(itemView.context)

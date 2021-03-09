@@ -8,5 +8,7 @@ data class VideoResponse(
     @SerializedName("key")
     var key: String,
     @SerializedName("site")
-    var site: String
+    var site: String,
+    @SerializedName("type")
+    var type: String,
 )

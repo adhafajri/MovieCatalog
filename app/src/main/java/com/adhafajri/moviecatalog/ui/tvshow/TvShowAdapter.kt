@@ -3,6 +3,8 @@ package com.adhafajri.moviecatalog.ui.tvshow
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adhafajri.moviecatalog.R
 import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
@@ -12,14 +14,31 @@ import com.adhafajri.moviecatalog.utils.Constant
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
-class TvShowAdapter : RecyclerView.Adapter<TvShowAdapter.CatalogViewHolder>() {
-    private var listCatalogs = ArrayList<CatalogEntity>()
+class TvShowAdapter :
+    PagedListAdapter<CatalogEntity, TvShowAdapter.CatalogViewHolder>(DIFF_CALLBACK) {
 
-    fun setCatalogs(catalog: List<CatalogEntity>?) {
-        if (catalog == null) return
-        this.listCatalogs.clear()
-        this.listCatalogs.addAll(catalog)
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CatalogEntity>() {
+            override fun areItemsTheSame(oldItem: CatalogEntity, newItem: CatalogEntity): Boolean {
+                return oldItem.catalogId == newItem.catalogId
+            }
+
+            override fun areContentsTheSame(
+                oldItem: CatalogEntity,
+                newItem: CatalogEntity
+            ): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
+//
+//    private var listCatalogs = ArrayList<CatalogEntity>()
+//
+//    fun setCatalogs(catalog: List<CatalogEntity>?) {
+//        if (catalog == null) return
+//        this.listCatalogs.clear()
+//        this.listCatalogs.addAll(catalog)
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatalogViewHolder {
         val itemsCatalogBinding =
@@ -28,11 +47,11 @@ class TvShowAdapter : RecyclerView.Adapter<TvShowAdapter.CatalogViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: CatalogViewHolder, position: Int) {
-        val catalog = listCatalogs[position]
-        holder.bind(catalog)
+        val catalog = getItem(position)
+        if (catalog != null) {
+            holder.bind(catalog)
+        }
     }
-
-    override fun getItemCount(): Int = listCatalogs.size
 
     class CatalogViewHolder(private val binding: ItemsCatalogBinding) :
         RecyclerView.ViewHolder(binding.root) {

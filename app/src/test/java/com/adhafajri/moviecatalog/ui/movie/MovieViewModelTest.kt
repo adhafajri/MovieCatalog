@@ -12,7 +12,6 @@ import com.adhafajri.moviecatalog.utils.api.APIInterface
 import com.nhaarman.mockitokotlin2.verify
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNotNull
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

@@ -7,8 +7,16 @@ object Constant {
     const val MOVIE = "movie"
     const val TV_SHOW = "tv_show"
 
+    const val POPULAR_MOVIES = "popular_movies"
+    const val UPCOMING_MOVIES = "upcoming_movies"
+
+    const val POPULAR_TV_SHOWS = "popular_tv_shows"
+    const val TODAY_AIRING_TV_SHOWS = "today_airing_tv_shows"
+
     const val SITE_YOUTUBE = "YouTube"
     const val SITE_VIMEO = "Vimeo"
+
+    const val TRAILER = "trailer"
 
     const val YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v="
     const val VIMEO_VIDEO_URL = "https://vimeo.com/"

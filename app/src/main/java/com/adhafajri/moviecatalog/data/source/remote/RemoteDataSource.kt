@@ -1,5 +1,8 @@
 package com.adhafajri.moviecatalog.data.source.remote
 
+import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.adhafajri.moviecatalog.data.source.remote.response.CreditResponse
 import com.adhafajri.moviecatalog.data.source.remote.response.MoviesResponse
 import com.adhafajri.moviecatalog.data.source.remote.response.TvShowResponse
@@ -7,8 +10,9 @@ import com.adhafajri.moviecatalog.data.source.remote.response.VideoResponse
 import com.adhafajri.moviecatalog.utils.api.APIHelper
 
 class RemoteDataSource private constructor(
-    private val apiHelper: APIHelper,
+    private val apiHelper: APIHelper
 ) {
+    private val TAG = RemoteDataSource::class.java.toString()
 
     companion object {
         @Volatile
@@ -20,43 +24,51 @@ class RemoteDataSource private constructor(
             }
     }
 
-    fun getPopularMovies(callback: LoadMoviesCallback) =
-        callback.onAllMoviesReceived(apiHelper.getPopularMovies())
-
-    fun getUpcomingMovies(callback: LoadMoviesCallback) =
-        callback.onAllMoviesReceived(apiHelper.getUpcomingMovies())
-
-    fun getPopularTvShows(callback: LoadTvShowsCallback) =
-        callback.onAllTvShowsReceived(apiHelper.getPopularTvShows())
-
-    fun getTodayAiringTvShows(callback: LoadTvShowsCallback) =
-        callback.onAllTvShowsReceived(apiHelper.getTodayAiringTvShows())
-
-    fun getMovieVideos(movieId: String, callback: LoadVideosCallback) =
-        callback.onAllVideosReceived(apiHelper.getMovieVideos(movieId))
-
-    fun getTvShowVideos(tvShowId: String, callback: LoadVideosCallback) =
-        callback.onAllVideosReceived(apiHelper.getTvShowsVideos(tvShowId))
-
-    fun getMovieCredits(movieId: String, callback: LoadCreditsCallback) =
-        callback.onAllCreditsReceived(apiHelper.getMovieCredits(movieId))
-
-    fun getTvShowCredits(tvShowId: String, callback: LoadCreditsCallback) =
-        callback.onAllCreditsReceived(apiHelper.getTvShowCredits(tvShowId))
-
-    interface LoadMoviesCallback {
-        fun onAllMoviesReceived(moviesResponse: List<MoviesResponse>?)
+    fun getPopularMovies(): LiveData<ApiResponse<List<MoviesResponse>>> {
+        val result = MutableLiveData<ApiResponse<List<MoviesResponse>>>()
+        result.value = ApiResponse.success(apiHelper.getPopularMovies())
+        return result
     }
 
-    interface LoadTvShowsCallback {
-        fun onAllTvShowsReceived(tvShowResponse: List<TvShowResponse>?)
+    fun getPopularTvShows(): LiveData<ApiResponse<List<TvShowResponse>>> {
+        val result = MutableLiveData<ApiResponse<List<TvShowResponse>>>()
+        result.value = ApiResponse.success(apiHelper.getPopularTvShows())
+        return result
     }
 
-    interface LoadVideosCallback {
-        fun onAllVideosReceived(videosResponse: List<VideoResponse>?)
+    fun getUpcomingMovies(): LiveData<ApiResponse<List<MoviesResponse>>> {
+        val result = MutableLiveData<ApiResponse<List<MoviesResponse>>>()
+        result.value = ApiResponse.success(apiHelper.getUpcomingMovies())
+        return result
     }
 
-    interface LoadCreditsCallback {
-        fun onAllCreditsReceived(creditResponse: List<CreditResponse>?)
+    fun getTodayAiringTvShows(): LiveData<ApiResponse<List<TvShowResponse>>> {
+        val result = MutableLiveData<ApiResponse<List<TvShowResponse>>>()
+        result.value = ApiResponse.success(apiHelper.getTodayAiringTvShows())
+        return result
+    }
+
+    fun getMovieVideos(movieId: String): MutableLiveData<ApiResponse<List<VideoResponse>>> {
+        val result = MutableLiveData<ApiResponse<List<VideoResponse>>>()
+        result.value = ApiResponse.success(apiHelper.getMovieVideos(movieId))
+        return result
+    }
+
+    fun getTvShowVideos(tvShowId: String): MutableLiveData<ApiResponse<List<VideoResponse>>> {
+        val result = MutableLiveData<ApiResponse<List<VideoResponse>>>()
+        result.value = ApiResponse.success(apiHelper.getTvShowsVideos(tvShowId))
+        return result
+    }
+
+    fun getMovieCredits(movieId: String): MutableLiveData<ApiResponse<List<CreditResponse>>> {
+        val result = MutableLiveData<ApiResponse<List<CreditResponse>>>()
+        result.value = ApiResponse.success(apiHelper.getMovieCredits(movieId))
+        return result
+    }
+
+    fun getTvShowCredits(tvShowId: String): MutableLiveData<ApiResponse<List<CreditResponse>>> {
+        val result = MutableLiveData<ApiResponse<List<CreditResponse>>>()
+        result.value = ApiResponse.success(apiHelper.getTvShowCredits(tvShowId))
+        return result
     }
 }

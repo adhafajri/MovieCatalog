@@ -4,21 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adhafajri.moviecatalog.databinding.FragmentTvShowBinding
 import com.adhafajri.moviecatalog.viewmodel.ViewModelFactory
+import com.dicoding.academies.vo.Status
 
 class TvShowFragment : Fragment() {
-    private lateinit var fragmentTvShowBinding: FragmentTvShowBinding
+    private var fragmentTvShowBinding: FragmentTvShowBinding? = null
+    private val binding get() = fragmentTvShowBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View {
-        fragmentTvShowBinding = FragmentTvShowBinding.inflate(layoutInflater, container, false)
-        return fragmentTvShowBinding.root
+    ): View? {
+        fragmentTvShowBinding = FragmentTvShowBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,39 +35,71 @@ class TvShowFragment : Fragment() {
             )[TvShowViewModel::class.java]
 
             loadPopularTvShows(viewModel)
-            loadUpcomingTvShows(viewModel)
+            loadTodayAiringTvShows(viewModel)
         }
     }
 
-    private fun loadUpcomingTvShows(viewModel: TvShowViewModel) {
+    private fun loadTodayAiringTvShows(viewModel: TvShowViewModel) {
         val upcomingTvShowAdapter = TvShowAdapter()
-        fragmentTvShowBinding.pbTvShowAiring.visibility = View.VISIBLE
-        viewModel.getTodayAiringTvShows().observe(this, {
-            fragmentTvShowBinding.pbTvShowAiring.visibility = View.GONE
-            upcomingTvShowAdapter.setCatalogs(it)
-            upcomingTvShowAdapter.notifyDataSetChanged()
+        viewModel.getTodayAiringTvShows().observe(this, Observer { catalogResource ->
+            if (catalogResource != null) {
+                when (catalogResource.status) {
+                    Status.LOADING -> binding?.pbTvShowAiring?.visibility = View.VISIBLE
+                    Status.SUCCESS -> {
+                        binding?.pbTvShowAiring?.visibility = View.GONE
+                        upcomingTvShowAdapter.submitList(catalogResource.data)
+                    }
+                    Status.ERROR -> {
+                        binding?.pbTvShowAiring?.visibility = View.GONE
+                        Toast.makeText(
+                            context,
+                            "Failed to load Upcoming TV Shows",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         })
 
-        with(fragmentTvShowBinding.rvTvShowAiring) {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            setHasFixedSize(true)
-            adapter = upcomingTvShowAdapter
+        with(binding?.rvTvShowAiring) {
+            this?.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            this?.setHasFixedSize(true)
+            this?.adapter = upcomingTvShowAdapter
         }
     }
 
     private fun loadPopularTvShows(viewModel: TvShowViewModel) {
         val popularTvShowAdapter = TvShowAdapter()
-        fragmentTvShowBinding.pbTvShowPopular.visibility = View.VISIBLE
-        viewModel.getPopularTvShows().observe(this, {
-            fragmentTvShowBinding.pbTvShowPopular.visibility = View.GONE
-            popularTvShowAdapter.setCatalogs(it)
-            popularTvShowAdapter.notifyDataSetChanged()
+        viewModel.getPopularTvShows().observe(this, Observer { catalogResource ->
+            if (catalogResource != null) {
+                when (catalogResource.status) {
+                    Status.LOADING -> binding?.pbTvShowPopular?.visibility = View.VISIBLE
+                    Status.SUCCESS -> {
+                        binding?.pbTvShowPopular?.visibility = View.GONE
+                        popularTvShowAdapter.submitList(catalogResource.data)
+                    }
+                    Status.ERROR -> {
+                        binding?.pbTvShowPopular?.visibility = View.GONE
+                        Toast.makeText(
+                            context,
+                            "Failed to load Popular TV Shows",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         })
 
-        with(fragmentTvShowBinding.rvTvShowPopular) {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            setHasFixedSize(true)
-            adapter = popularTvShowAdapter
+        with(binding?.rvTvShowPopular) {
+            this?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            this?.setHasFixedSize(true)
+            this?.adapter = popularTvShowAdapter
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        fragmentTvShowBinding = null
     }
 }

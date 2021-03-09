@@ -4,21 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adhafajri.moviecatalog.databinding.FragmentMovieBinding
 import com.adhafajri.moviecatalog.viewmodel.ViewModelFactory
+import com.dicoding.academies.vo.Status
 
 class MovieFragment : Fragment() {
-    private lateinit var fragmentMovieBinding: FragmentMovieBinding
+    private var fragmentMovieBinding: FragmentMovieBinding? = null
+    private val binding get() = fragmentMovieBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View {
+    ): View? {
         fragmentMovieBinding = FragmentMovieBinding.inflate(layoutInflater, container, false)
-        return fragmentMovieBinding.root
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,33 +41,72 @@ class MovieFragment : Fragment() {
 
     private fun loadUpcomingMovies(viewModel: MovieViewModel) {
         val upcomingMovieAdapter = MovieAdapter()
-        fragmentMovieBinding.pbMovieUpcoming.visibility = View.VISIBLE
-        viewModel.getUpcomingMovies().observe(this, {
-            fragmentMovieBinding.pbMovieUpcoming.visibility = View.GONE
-            upcomingMovieAdapter.setCatalogs(it)
-            upcomingMovieAdapter.notifyDataSetChanged()
+        viewModel.getUpcomingMovies().observe(this, Observer { catalogResource ->
+            if (catalogResource != null) {
+                when (catalogResource.status) {
+                    Status.LOADING -> binding?.pbMovieUpcoming?.visibility = View.VISIBLE
+                    Status.SUCCESS -> {
+                        binding?.pbMovieUpcoming?.visibility = View.GONE
+                        upcomingMovieAdapter.submitList(catalogResource.data)
+                    }
+                    Status.ERROR -> {
+                        binding?.pbMovieUpcoming?.visibility = View.GONE
+                        Toast.makeText(
+                            context,
+                            "Failed to load Upcoming Movies",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         })
+//        fragmentMovieBinding.pbMovieUpcoming.visibility = View.VISIBLE
+//        viewModel.getUpcomingMovies().observe(this, {
+//            fragmentMovieBinding.pbMovieUpcoming.visibility = View.GONE
+//            upcomingMovieAdapter.setCatalogs(it)
+//            upcomingMovieAdapter.notifyDataSetChanged()
+//        })
 
-        with(fragmentMovieBinding.rvMovieUpcoming) {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            setHasFixedSize(true)
-            adapter = upcomingMovieAdapter
+        with(binding?.rvMovieUpcoming) {
+            this?.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            this?.setHasFixedSize(true)
+            this?.adapter = upcomingMovieAdapter
         }
     }
 
     private fun loadPopularMovies(viewModel: MovieViewModel) {
         val popularMovieAdapter = MovieAdapter()
-        fragmentMovieBinding.pbMoviePopular.visibility = View.VISIBLE
-        viewModel.getPopularMovies().observe(this, {
-            fragmentMovieBinding.pbMoviePopular.visibility = View.GONE
-            popularMovieAdapter.setCatalogs(it)
-            popularMovieAdapter.notifyDataSetChanged()
+        viewModel.getPopularMovies().observe(this, Observer { catalogResource ->
+            if (catalogResource != null) {
+                when (catalogResource.status) {
+                    Status.LOADING -> binding?.pbMoviePopular?.visibility = View.VISIBLE
+                    Status.SUCCESS -> {
+                        binding?.pbMoviePopular?.visibility = View.GONE
+                        popularMovieAdapter.submitList(catalogResource.data)
+                    }
+                    Status.ERROR -> {
+                        binding?.pbMoviePopular?.visibility = View.GONE
+                        Toast.makeText(
+                            context,
+                            "Failed to load Popular Movies",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         })
+//        fragmentMovieBinding.pbMoviePopular.visibility = View.VISIBLE
+//        viewModel.getPopularMovies().observe(this, {
+//            fragmentMovieBinding.pbMoviePopular.visibility = View.GONE
+//            popularMovieAdapter.setCatalogs(it)
+//            popularMovieAdapter.notifyDataSetChanged()
+//        })
 
-        with(fragmentMovieBinding.rvMoviePopular) {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            setHasFixedSize(true)
-            adapter = popularMovieAdapter
+        with(binding?.rvMoviePopular) {
+            this?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            this?.setHasFixedSize(true)
+            this?.adapter = popularMovieAdapter
         }
     }
 }
