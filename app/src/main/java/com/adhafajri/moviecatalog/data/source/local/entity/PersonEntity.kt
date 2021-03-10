@@ -1,7 +1,10 @@
 package com.adhafajri.moviecatalog.data.source.local.entity
 
 import androidx.annotation.NonNull
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 
 @Entity(
     tableName = "personentities",
@@ -19,7 +22,6 @@ data class PersonEntity(
     @ColumnInfo(name = "personId")
     var personId: String,
 
-    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "catalogId")
     var catalogId: String,

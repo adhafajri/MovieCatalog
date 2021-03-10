@@ -1,19 +1,29 @@
 package com.adhafajri.moviecatalog.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
+import com.adhafajri.moviecatalog.data.source.local.LocalDataSource
+import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
+import com.adhafajri.moviecatalog.data.source.local.entity.CatalogWithPerson
+import com.adhafajri.moviecatalog.data.source.local.entity.PersonEntity
+import com.adhafajri.moviecatalog.data.source.local.entity.VideoEntity
 import com.adhafajri.moviecatalog.data.source.remote.RemoteDataSource
+import com.adhafajri.moviecatalog.utils.AppExecutors
+import com.adhafajri.moviecatalog.utils.Constant
+import com.adhafajri.moviecatalog.utils.LiveDataTestUtil
+import com.adhafajri.moviecatalog.utils.PagedListUtil
 import com.adhafajri.moviecatalog.utils.api.APIClient
 import com.adhafajri.moviecatalog.utils.api.APIHelper
 import com.adhafajri.moviecatalog.utils.api.APIInterface
-import com.adhafajri.moviecatalog.utils.LiveDataTestUtil
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.eq
+import com.adhafajri.moviecatalog.vo.Resource
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 
 class CatalogRepositoryTest {
@@ -21,250 +31,275 @@ class CatalogRepositoryTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val apiHelper = APIHelper(APIClient().getClient().create(
-        APIInterface::class.java))
-
+    private val apiHelper = APIHelper(
+        APIClient().getClient().create(
+            APIInterface::class.java
+        )
+    )
 
     private val remote = mock(RemoteDataSource::class.java)
-    private val catalogRepository = TestCatalogRepository(remote)
+    private val local = mock(LocalDataSource::class.java)
+    private val appExecutors = mock(AppExecutors::class.java)
+
+    private val catalogRepository = TestCatalogRepository(remote, local, appExecutors)
 
     private val popularMovieResponse = apiHelper.getPopularMovies()
-    private val popularMovieId = popularMovieResponse?.first()?.id
+    private val popularMovieId = popularMovieResponse.first().id
 
     private val upcomingMovieResponse = apiHelper.getUpcomingMovies()
-    private val upcomingMovieId = upcomingMovieResponse?.first()?.id
 
     private val popularTvShowResponse = apiHelper.getPopularTvShows()
-    private val popularTvShowId = popularTvShowResponse?.first()?.id
+    private val popularTvShowId = popularTvShowResponse.first().id
 
     private val todayAiringTvShowResponse = apiHelper.getTodayAiringTvShows()
-    private val todayAiringTvShowId = todayAiringTvShowResponse?.first()?.id
 
-    private val popularMovieVideosResponse = popularMovieId?.let { apiHelper.getMovieVideos(it) }
+    private val movieCreditResponse =
+        apiHelper.getMovieCredits(popularMovieId)
 
-    private val upcomingMovieVideosResponse = upcomingMovieId?.let { apiHelper.getMovieVideos(it) }
+    private val tvShowCreditResponse =
+        apiHelper.getTvShowCredits(popularTvShowId)
 
-    private val popularTvShowVideosResponse =
-        popularTvShowId?.let { apiHelper.getTvShowsVideos(it) }
+    private val movieVideosResponse = apiHelper.getMovieVideos(popularMovieId)
 
-    private val todayAiringTvShowVideosResponse =
-        todayAiringTvShowId?.let { apiHelper.getTvShowsVideos(it) }
-
-    private val popularMovieCreditResponse = popularMovieId?.let { apiHelper.getMovieCredits(it) }
-
-    private val upcomingMovieCreditResponse = upcomingMovieId?.let { apiHelper.getMovieCredits(it) }
-
-    private val popularTvShowCreditResponse =
-        popularTvShowId?.let { apiHelper.getTvShowCredits(it) }
-
-    private val todayAiringTvShowCreditResponse =
-        todayAiringTvShowId?.let { apiHelper.getTvShowCredits(it) }
+    private val tvShowVideosResponse =
+        apiHelper.getTvShowsVideos(popularTvShowId)
 
     @Test
     fun getPopularMovies() {
-        doAnswer {
-            (it.arguments.first() as RemoteDataSource.LoadMoviesCallback)
-                .onAllMoviesReceived(popularMovieResponse)
-        }.`when`(remote).getPopularMovies(any())
-        val movieEntities = LiveDataTestUtil.getValue(catalogRepository.getPopularMovies())
-        verify(remote).getPopularMovies(any())
-        assertNotNull(movieEntities)
-        assertEquals(popularMovieResponse?.size?.toLong(), movieEntities.size.toLong())
+        val dataSourceFactory =
+            mock(DataSource.Factory::class.java) as DataSource.Factory<Int, CatalogEntity>
+        `when`(local.getPopularMovieCatalogs()).thenReturn(dataSourceFactory)
+        catalogRepository.getPopularMovies()
+
+        val catalogEntities =
+            Resource.success(PagedListUtil.mockPagedList(apiHelper.getPopularMovies()))
+        verify(local).getPopularMovieCatalogs()
+        assertNotNull(catalogEntities.data)
+        assertEquals(popularMovieResponse.size.toLong(), catalogEntities.data?.size?.toLong())
     }
 
     @Test
     fun getUpcomingMovies() {
-        doAnswer {
-            (it.arguments.first() as RemoteDataSource.LoadMoviesCallback)
-                .onAllMoviesReceived(upcomingMovieResponse)
-        }.`when`(remote).getUpcomingMovies(any())
-        val movieEntities = LiveDataTestUtil.getValue(catalogRepository.getUpcomingMovies())
-        verify(remote).getUpcomingMovies(any())
-        assertNotNull(movieEntities)
-        assertEquals(upcomingMovieResponse?.size?.toLong(), movieEntities.size.toLong())
+        val dataSourceFactory =
+            mock(DataSource.Factory::class.java) as DataSource.Factory<Int, CatalogEntity>
+        `when`(local.getUpcomingMovieCatalogs()).thenReturn(dataSourceFactory)
+        catalogRepository.getUpcomingMovies()
+
+        val catalogEntities =
+            Resource.success(PagedListUtil.mockPagedList(apiHelper.getUpcomingMovies()))
+        verify(local).getUpcomingMovieCatalogs()
+        assertNotNull(catalogEntities.data)
+        assertEquals(upcomingMovieResponse.size.toLong(), catalogEntities.data?.size?.toLong())
     }
 
     @Test
     fun getPopularTvShows() {
-        doAnswer {
-            (it.arguments.first() as RemoteDataSource.LoadTvShowsCallback)
-                .onAllTvShowsReceived(popularTvShowResponse)
-        }.`when`(remote).getPopularTvShows(any())
-        val tvShowEntities = LiveDataTestUtil.getValue(catalogRepository.getPopularTvShows())
-        verify(remote).getPopularTvShows(any())
-        assertNotNull(tvShowEntities)
-        assertEquals(popularTvShowResponse?.size?.toLong(), tvShowEntities.size.toLong())
+        val dataSourceFactory =
+            mock(DataSource.Factory::class.java) as DataSource.Factory<Int, CatalogEntity>
+        `when`(local.getPopularTvShowCatalogs()).thenReturn(dataSourceFactory)
+        catalogRepository.getPopularTvShows()
+
+        val catalogEntities =
+            Resource.success(PagedListUtil.mockPagedList(apiHelper.getPopularTvShows()))
+        verify(local).getPopularTvShowCatalogs()
+        assertNotNull(catalogEntities.data)
+        assertEquals(popularTvShowResponse.size.toLong(), catalogEntities.data?.size?.toLong())
     }
 
     @Test
     fun getTodayAiringTvShows() {
-        doAnswer {
-            (it.arguments.first() as RemoteDataSource.LoadTvShowsCallback)
-                .onAllTvShowsReceived(todayAiringTvShowResponse)
-        }.`when`(remote).getTodayAiringTvShows(any())
-        val tvShowEntities = LiveDataTestUtil.getValue(catalogRepository.getTodayAiringTvShows())
-        verify(remote).getTodayAiringTvShows(any())
-        assertNotNull(tvShowEntities)
-        assertEquals(todayAiringTvShowResponse?.size?.toLong(), tvShowEntities.size.toLong())
+        val dataSourceFactory =
+            mock(DataSource.Factory::class.java) as DataSource.Factory<Int, CatalogEntity>
+        `when`(local.getTodayAiringTvShowCatalogs()).thenReturn(dataSourceFactory)
+        catalogRepository.getTodayAiringTvShows()
+
+        val catalogEntities =
+            Resource.success(PagedListUtil.mockPagedList(apiHelper.getTodayAiringTvShows()))
+        verify(local).getTodayAiringTvShowCatalogs()
+        assertNotNull(catalogEntities.data)
+        assertEquals(todayAiringTvShowResponse.size.toLong(), catalogEntities.data?.size?.toLong())
     }
 
     @Test
-    fun getPopularMovieVideo() {
-        popularMovieId?.let { id ->
-            {
-                doAnswer {
-                    (it.arguments.first() as RemoteDataSource.LoadVideosCallback)
-                        .onAllVideosReceived(popularMovieVideosResponse)
-                }.`when`(remote).getMovieVideos(eq(id), any())
+    fun getMovieCatalogWithPersons() {
+        val dummyEntity = MutableLiveData<CatalogWithPerson>()
 
-                val movieVideoEntities =
-                    LiveDataTestUtil.getValue(catalogRepository.getMovieVideo(id))
-                verify(remote).getMovieVideos(id, any())
+        var catalog: CatalogEntity
+        with(popularMovieResponse.first()) {
+            catalog = CatalogEntity(id, Constant.MOVIE, null, title, posterPath, overview)
+        }
 
-                assertNotNull(movieVideoEntities)
-                assertNotNull(movieVideoEntities.videoId)
-                assertNotNull(movieVideoEntities.key)
-                assertNotNull(movieVideoEntities.site)
-                assertEquals(popularMovieVideosResponse?.first(), movieVideoEntities)
+        val catalogId = catalog.catalogId
+
+        val personList = ArrayList<PersonEntity>()
+        movieCreditResponse.forEach {
+            with(it) {
+                val person = PersonEntity(
+                    id, catalogId, name
+                )
+                personList.add(person)
             }
         }
+
+        val catalogWithPerson = CatalogWithPerson(
+            catalog,
+            personList
+        )
+
+        dummyEntity.value =
+            catalogWithPerson
+        `when`<LiveData<CatalogWithPerson>>(local.getCatalogWithPersons(catalogId)).thenReturn(
+            dummyEntity
+        )
+
+        val catalogEntities =
+            LiveDataTestUtil.getValue(
+                catalogRepository.getCatalogWithPersons(
+                    catalogId,
+                    Constant.MOVIE
+                )
+            )
+        verify(local).getCatalogWithPersons(catalogId)
+        assertNotNull(catalogEntities.data)
+        assertNotNull(catalogEntities.data?.catalog?.title)
+        assertEquals(catalog.title, catalogEntities.data?.catalog?.title)
     }
 
     @Test
-    fun getUpcomingMovieVideo() {
-        popularMovieId?.let { id ->
-            {
-                doAnswer {
-                    (it.arguments.first() as RemoteDataSource.LoadVideosCallback)
-                        .onAllVideosReceived(upcomingMovieVideosResponse)
-                }.`when`(remote).getMovieVideos(eq(id), any())
+    fun getTvShowCatalogWithPersons() {
+        val dummyEntity = MutableLiveData<CatalogWithPerson>()
 
-                val movieVideoEntities =
-                    LiveDataTestUtil.getValue(catalogRepository.getMovieVideo(id))
-                verify(remote).getMovieVideos(id, any())
+        var catalog: CatalogEntity
+        with(popularTvShowResponse.first()) {
+            catalog = CatalogEntity(id, Constant.TV_SHOW, null, name, posterPath, overview)
+        }
 
-                assertNotNull(movieVideoEntities)
-                assertNotNull(movieVideoEntities.videoId)
-                assertNotNull(movieVideoEntities.key)
-                assertNotNull(movieVideoEntities.site)
-                assertEquals(upcomingMovieVideosResponse?.first(), movieVideoEntities)
+        val catalogId = catalog.catalogId
+
+        val personList = ArrayList<PersonEntity>()
+        tvShowCreditResponse.forEach {
+            with(it) {
+                val person = PersonEntity(
+                    id, catalogId, name
+                )
+                personList.add(person)
             }
         }
+
+        val catalogWithPerson = CatalogWithPerson(
+            catalog,
+            personList
+        )
+
+        dummyEntity.value =
+            catalogWithPerson
+        `when`<LiveData<CatalogWithPerson>>(local.getCatalogWithPersons(catalogId)).thenReturn(
+            dummyEntity
+        )
+
+        val catalogEntities =
+            LiveDataTestUtil.getValue(
+                catalogRepository.getCatalogWithPersons(
+                    catalogId,
+                    Constant.TV_SHOW
+                )
+            )
+        verify(local).getCatalogWithPersons(catalogId)
+        assertNotNull(catalogEntities.data)
+        assertNotNull(catalogEntities.data?.catalog?.title)
+        assertEquals(catalog.title, catalogEntities.data?.catalog?.title)
+    }
+
+
+    @Test
+    fun getMovieCatalogVideo() {
+        val dummyEntity = MutableLiveData<CatalogEntity>()
+
+        var catalog: CatalogEntity
+        with(popularMovieResponse.first()) {
+            catalog = CatalogEntity(id, Constant.MOVIE, null, title, posterPath, overview)
+        }
+
+        val catalogId = catalog.catalogId
+
+        val videoResponse = movieVideosResponse.find { it.type == Constant.TRAILER }
+        val videoSite = when (videoResponse?.site) {
+            Constant.SITE_YOUTUBE -> Constant.YOUTUBE_VIDEO_URL
+            Constant.SITE_VIMEO -> Constant.VIMEO_VIDEO_URL
+            else -> null
+        }
+
+        if (videoSite != null && videoResponse != null) {
+            catalog.videoEntity = VideoEntity("$videoSite${videoResponse.key}")
+        }
+
+        dummyEntity.value = catalog
+        `when`<LiveData<CatalogEntity>>(local.getCatalogWithVideo(catalogId)).thenReturn(
+            dummyEntity
+        )
+
+        val catalogEntitiesVideo =
+            LiveDataTestUtil.getValue(catalogRepository.getVideo(catalogId, Constant.MOVIE))
+        verify(local).getCatalogWithVideo(catalogId)
+        assertNotNull(catalogEntitiesVideo)
+        assertNotNull(catalogEntitiesVideo.data?.videoEntity)
+        assertNotNull(catalogEntitiesVideo.data?.videoEntity?.videoUrl)
+        assertEquals(
+            catalog.videoEntity?.videoUrl,
+            catalogEntitiesVideo.data?.videoEntity?.videoUrl
+        )
     }
 
     @Test
-    fun getPopularTvShowVideo() {
-        popularTvShowId?.let { id ->
-            {
-                doAnswer {
-                    (it.arguments.first() as RemoteDataSource.LoadVideosCallback)
-                        .onAllVideosReceived(popularTvShowVideosResponse)
-                }.`when`(remote).getTvShowVideos(eq(id), any())
+    fun getTvShowCatalogVideo() {
+        val dummyEntity = MutableLiveData<CatalogEntity>()
 
-                val tvShowVideoEntities =
-                    LiveDataTestUtil.getValue(catalogRepository.getTvShowVideo(id))
-                verify(remote).getTvShowVideos(id, any())
-
-                assertNotNull(tvShowVideoEntities)
-                assertNotNull(tvShowVideoEntities.videoId)
-                assertNotNull(tvShowVideoEntities.key)
-                assertNotNull(tvShowVideoEntities.site)
-                assertEquals(popularTvShowVideosResponse?.first(), tvShowVideoEntities)
-            }
+        var catalog: CatalogEntity
+        with(popularTvShowResponse.first()) {
+            catalog = CatalogEntity(id, Constant.TV_SHOW, null, name, posterPath, overview)
         }
+
+        val catalogId = catalog.catalogId
+
+        val videoResponse = tvShowVideosResponse.find { it.type == Constant.TRAILER }
+        val videoSite = when (videoResponse?.site) {
+            Constant.SITE_YOUTUBE -> Constant.YOUTUBE_VIDEO_URL
+            Constant.SITE_VIMEO -> Constant.VIMEO_VIDEO_URL
+            else -> null
+        }
+
+        if (videoSite != null && videoResponse != null) {
+            catalog.videoEntity = VideoEntity("$videoSite${videoResponse.key}")
+        }
+
+        dummyEntity.value = catalog
+        `when`<LiveData<CatalogEntity>>(local.getCatalogWithVideo(catalogId)).thenReturn(
+            dummyEntity
+        )
+
+        val catalogEntitiesVideo =
+            LiveDataTestUtil.getValue(catalogRepository.getVideo(catalogId, Constant.TV_SHOW))
+        verify(local).getCatalogWithVideo(catalogId)
+        assertNotNull(catalogEntitiesVideo)
+        assertNotNull(catalogEntitiesVideo.data?.videoEntity)
+        assertNotNull(catalogEntitiesVideo.data?.videoEntity?.videoUrl)
+        assertEquals(
+            catalog.videoEntity?.videoUrl,
+            catalogEntitiesVideo.data?.videoEntity?.videoUrl
+        )
     }
 
     @Test
-    fun getTodayAiringTvShowVideo() {
-        todayAiringTvShowId?.let { id ->
-            {
-                doAnswer {
-                    (it.arguments.first() as RemoteDataSource.LoadVideosCallback)
-                        .onAllVideosReceived(todayAiringTvShowVideosResponse)
-                }.`when`(remote).getTvShowVideos(eq(id), any())
+    fun getFavoriteCatalogs() {
+        val dataSourceFactory =
+            mock(DataSource.Factory::class.java) as DataSource.Factory<Int, CatalogEntity>
+        `when`(local.getFavoriteCatalogs()).thenReturn(dataSourceFactory)
+        catalogRepository.getFavoriteCatalogs()
 
-                val tvShowVideoEntities =
-                    LiveDataTestUtil.getValue(catalogRepository.getTvShowVideo(id))
-                verify(remote).getTvShowVideos(id, any())
-
-                assertNotNull(tvShowVideoEntities)
-                assertNotNull(tvShowVideoEntities.videoId)
-                assertNotNull(tvShowVideoEntities.key)
-                assertNotNull(tvShowVideoEntities.site)
-                assertEquals(todayAiringTvShowVideosResponse?.first(), tvShowVideoEntities)
-            }
-        }
-    }
-
-    @Test
-    fun getPopularMovieCredits() {
-        popularMovieId?.let { id ->
-            {
-                doAnswer {
-                    (it.arguments.first() as RemoteDataSource.LoadCreditsCallback)
-                        .onAllCreditsReceived(popularMovieCreditResponse)
-                }.`when`(remote).getMovieCredits(eq(id), any())
-                val movieCreditEntities =
-                    LiveDataTestUtil.getValue(catalogRepository.getMovieCredits(id))
-                verify(remote).getTodayAiringTvShows(any())
-                assertNotNull(movieCreditEntities)
-                assertEquals(popularMovieCreditResponse?.size?.toLong(),
-                    movieCreditEntities.size.toLong())
-            }
-        }
-    }
-
-    @Test
-    fun getUpcomingMovieCredits() {
-        upcomingMovieId?.let { id ->
-            {
-                doAnswer {
-                    (it.arguments.first() as RemoteDataSource.LoadCreditsCallback)
-                        .onAllCreditsReceived(upcomingMovieCreditResponse)
-                }.`when`(remote).getMovieCredits(eq(id), any())
-                val movieCreditEntities =
-                    LiveDataTestUtil.getValue(catalogRepository.getMovieCredits(id))
-                verify(remote).getTodayAiringTvShows(any())
-                assertNotNull(movieCreditEntities)
-                assertEquals(upcomingMovieCreditResponse?.size?.toLong(),
-                    movieCreditEntities.size.toLong())
-            }
-        }
-    }
-
-    @Test
-    fun getPopularTvShowCredits() {
-        popularTvShowId?.let { id ->
-            {
-                doAnswer {
-                    (it.arguments.first() as RemoteDataSource.LoadCreditsCallback)
-                        .onAllCreditsReceived(popularTvShowCreditResponse)
-                }.`when`(remote).getMovieCredits(eq(id), any())
-                val tvShowCreditEntities =
-                    LiveDataTestUtil.getValue(catalogRepository.getTvShowCredits(id))
-                verify(remote).getTodayAiringTvShows(any())
-                assertNotNull(tvShowCreditEntities)
-                assertEquals(popularTvShowCreditResponse?.size?.toLong(),
-                    tvShowCreditEntities.size.toLong())
-            }
-        }
-    }
-
-    @Test
-    fun getTodayAiringTvShowCredits() {
-        todayAiringTvShowId?.let { id ->
-            {
-                doAnswer {
-                    (it.arguments.first() as RemoteDataSource.LoadCreditsCallback)
-                        .onAllCreditsReceived(todayAiringTvShowCreditResponse)
-                }.`when`(remote).getMovieCredits(eq(id), any())
-                val tvShowCreditEntities =
-                    LiveDataTestUtil.getValue(catalogRepository.getTvShowCredits(id))
-                verify(remote).getTodayAiringTvShows(any())
-                assertNotNull(tvShowCreditEntities)
-                assertEquals(todayAiringTvShowCreditResponse?.size?.toLong(),
-                    tvShowCreditEntities.size.toLong())
-            }
-        }
+        val catalogEntities =
+            Resource.success(PagedListUtil.mockPagedList(apiHelper.getPopularMovies()))
+        verify(local).getFavoriteCatalogs()
+        assertNotNull(catalogEntities.data)
+        assertEquals(popularMovieResponse.size.toLong(), catalogEntities.data?.size?.toLong())
     }
 }

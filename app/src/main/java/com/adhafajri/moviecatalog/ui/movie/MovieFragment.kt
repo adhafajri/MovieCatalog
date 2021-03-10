@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adhafajri.moviecatalog.databinding.FragmentMovieBinding
 import com.adhafajri.moviecatalog.viewmodel.ViewModelFactory
-import com.dicoding.academies.vo.Status
+import com.adhafajri.moviecatalog.vo.Status
 
 class MovieFragment : Fragment() {
     private var fragmentMovieBinding: FragmentMovieBinding? = null
@@ -28,7 +28,7 @@ class MovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
-            val factory = ViewModelFactory.getInstance()
+            val factory = ViewModelFactory.getInstance(activity!!)
             val viewModel = ViewModelProvider(
                 this,
                 factory
@@ -60,12 +60,6 @@ class MovieFragment : Fragment() {
                 }
             }
         })
-//        fragmentMovieBinding.pbMovieUpcoming.visibility = View.VISIBLE
-//        viewModel.getUpcomingMovies().observe(this, {
-//            fragmentMovieBinding.pbMovieUpcoming.visibility = View.GONE
-//            upcomingMovieAdapter.setCatalogs(it)
-//            upcomingMovieAdapter.notifyDataSetChanged()
-//        })
 
         with(binding?.rvMovieUpcoming) {
             this?.layoutManager =
@@ -96,15 +90,10 @@ class MovieFragment : Fragment() {
                 }
             }
         })
-//        fragmentMovieBinding.pbMoviePopular.visibility = View.VISIBLE
-//        viewModel.getPopularMovies().observe(this, {
-//            fragmentMovieBinding.pbMoviePopular.visibility = View.GONE
-//            popularMovieAdapter.setCatalogs(it)
-//            popularMovieAdapter.notifyDataSetChanged()
-//        })
 
         with(binding?.rvMoviePopular) {
-            this?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            this?.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             this?.setHasFixedSize(true)
             this?.adapter = popularMovieAdapter
         }

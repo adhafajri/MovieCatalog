@@ -3,12 +3,10 @@ package com.adhafajri.moviecatalog.ui.movie
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.paging.PagedList
 import com.adhafajri.moviecatalog.data.CatalogRepository
 import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
-import com.adhafajri.moviecatalog.utils.Constant
-import com.adhafajri.moviecatalog.utils.api.APIClient
-import com.adhafajri.moviecatalog.utils.api.APIHelper
-import com.adhafajri.moviecatalog.utils.api.APIInterface
+import com.adhafajri.moviecatalog.vo.Resource
 import com.nhaarman.mockitokotlin2.verify
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNotNull
@@ -23,7 +21,6 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class MovieViewModelTest {
     private lateinit var viewModel: MovieViewModel
-    private lateinit var apiHelper: APIHelper
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -32,70 +29,49 @@ class MovieViewModelTest {
     private lateinit var catalogRepository: CatalogRepository
 
     @Mock
-    private lateinit var observer: Observer<List<CatalogEntity>>
+    private lateinit var observer: Observer<Resource<PagedList<CatalogEntity>>>
+
+    @Mock
+    private lateinit var pagedList: PagedList<CatalogEntity>
 
     @Before
     fun setUp() {
         viewModel = MovieViewModel(catalogRepository)
-        apiHelper = APIHelper(APIClient().getClient().create(
-            APIInterface::class.java))
     }
 
     @Test
     fun getPopularMovies() {
-        val movies = apiHelper.getPopularMovies()
-        val movieList = ArrayList<CatalogEntity>()
-        val catalogList = MutableLiveData<List<CatalogEntity>>()
-        movies?.forEach {
-            with(it) {
-                val catalog = CatalogEntity(
-                    id,
-                    Constant.MOVIE,
-                    title,
-                    "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
-                    overview
-                )
-                movieList.add(catalog)
-            }
-        }
-        catalogList.value = movieList
+        val dummyCourses = Resource.success(pagedList)
+        `when`(dummyCourses.data?.size).thenReturn(5)
 
-        `when`(catalogRepository.getPopularMovies()).thenReturn(catalogList)
-        val catalogEntities = viewModel.getPopularMovies().value
+        val catalog = MutableLiveData<Resource<PagedList<CatalogEntity>>>()
+        catalog.value = dummyCourses
+
+        `when`(catalogRepository.getPopularMovies()).thenReturn(catalog)
+        val catalogEntities = viewModel.getPopularMovies().value?.data
         verify(catalogRepository).getPopularMovies()
         assertNotNull(catalogEntities)
-        assertEquals(catalogList.value?.size, catalogEntities?.size)
+        assertEquals(catalog.value?.data?.size, catalogEntities?.size)
 
         viewModel.getPopularMovies().observeForever(observer)
-        verify(observer).onChanged(movieList)
+        verify(observer).onChanged(dummyCourses)
     }
 
     @Test
     fun getUpcomingMovies() {
-        val movies = apiHelper.getUpcomingMovies()
-        val movieList = ArrayList<CatalogEntity>()
-        val catalogList = MutableLiveData<List<CatalogEntity>>()
-        movies?.forEach {
-            with(it) {
-                val catalog = CatalogEntity(
-                    id,
-                    Constant.MOVIE,
-                    title,
-                    "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
-                    overview
-                )
-                movieList.add(catalog)
-            }
-        }
-        catalogList.value = movieList
+        val dummyCourses = Resource.success(pagedList)
+        `when`(dummyCourses.data?.size).thenReturn(5)
 
-        `when`(catalogRepository.getUpcomingMovies()).thenReturn(catalogList)
-        val catalogEntities = viewModel.getUpcomingMovies().value
+        val catalog = MutableLiveData<Resource<PagedList<CatalogEntity>>>()
+        catalog.value = dummyCourses
+
+        `when`(catalogRepository.getUpcomingMovies()).thenReturn(catalog)
+        val catalogEntities = viewModel.getUpcomingMovies().value?.data
         verify(catalogRepository).getUpcomingMovies()
         assertNotNull(catalogEntities)
-        assertEquals(catalogList.value?.size, catalogEntities?.size)
+        assertEquals(catalog.value?.data?.size, catalogEntities?.size)
 
         viewModel.getUpcomingMovies().observeForever(observer)
-        verify(observer).onChanged(movieList)
+        verify(observer).onChanged(dummyCourses)
     }
 }

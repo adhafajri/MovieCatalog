@@ -2,7 +2,9 @@ package com.adhafajri.moviecatalog.data.source.local
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
-import com.adhafajri.moviecatalog.data.source.local.entity.*
+import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
+import com.adhafajri.moviecatalog.data.source.local.entity.CatalogWithPerson
+import com.adhafajri.moviecatalog.data.source.local.entity.PersonEntity
 import com.adhafajri.moviecatalog.data.source.local.room.CatalogDao
 import com.adhafajri.moviecatalog.utils.Constant
 
@@ -36,25 +38,12 @@ class LocalDataSource private constructor(private val catalogDao: CatalogDao) {
     fun getCatalogWithPersons(catalogId: String): LiveData<CatalogWithPerson> =
         catalogDao.getCatalogWithPersonById(catalogId)
 
-    fun getAllPersonsByCatalogId(catalogId: String): LiveData<List<PersonEntity>> =
-        catalogDao.getPersonByCatalogId(catalogId)
-
-    fun getPersonWithJobs(personId: String): LiveData<PersonWithJob> =
-        catalogDao.getPersonWithJobById(personId)
-
-    fun getAllJobsByPersonId(personId: String): LiveData<List<JobEntity>> =
-        catalogDao.getJobByPersonId(personId)
-
     fun insertCatalogs(catalogs: List<CatalogEntity>) {
         catalogDao.insertCatalogs(catalogs)
     }
 
     fun insertPersons(persons: List<PersonEntity>) {
         catalogDao.insertPersons(persons)
-    }
-
-    fun insertJobs(jobs: List<JobEntity>) {
-        catalogDao.insertJobs(jobs)
     }
 
     fun setCatalogFavorite(catalog: CatalogEntity, newState: Boolean) {

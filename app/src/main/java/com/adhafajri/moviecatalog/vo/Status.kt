@@ -1,4 +1,4 @@
-package com.dicoding.academies.vo
+package com.adhafajri.moviecatalog.vo
 
 enum class Status {
     SUCCESS,

@@ -31,14 +31,6 @@ class TvShowAdapter :
             }
         }
     }
-//
-//    private var listCatalogs = ArrayList<CatalogEntity>()
-//
-//    fun setCatalogs(catalog: List<CatalogEntity>?) {
-//        if (catalog == null) return
-//        this.listCatalogs.clear()
-//        this.listCatalogs.addAll(catalog)
-//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatalogViewHolder {
         val itemsCatalogBinding =

@@ -1,9 +1,7 @@
 package com.adhafajri.moviecatalog.utils.api
 
-import android.content.Context
 import android.util.Log
 import com.adhafajri.moviecatalog.BuildConfig
-import com.adhafajri.moviecatalog.data.source.remote.RemoteDataSource
 import com.adhafajri.moviecatalog.data.source.remote.response.CreditResponse
 import com.adhafajri.moviecatalog.data.source.remote.response.MoviesResponse
 import com.adhafajri.moviecatalog.data.source.remote.response.TvShowResponse
@@ -129,7 +127,7 @@ class APIHelper(private val apiInterface: APIInterface) {
 
         val result = ArrayList<CreditResponse>()
         if (response.isSuccessful) {
-            response.body()?.results?.let { result.addAll(it) }
+            response.body()?.crew?.let { result.addAll(it) }
         } else {
             response.errorBody()?.toString()?.let {
                 Log.d(TAG, "onResponse: $it")
@@ -146,7 +144,7 @@ class APIHelper(private val apiInterface: APIInterface) {
 
         val result = ArrayList<CreditResponse>()
         if (response.isSuccessful) {
-            response.body()?.results?.let { result.addAll(it) }
+            response.body()?.crew?.let { result.addAll(it) }
         } else {
             response.errorBody()?.toString()?.let {
                 Log.d(TAG, "onResponse: $it")

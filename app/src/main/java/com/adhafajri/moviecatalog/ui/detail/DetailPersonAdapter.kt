@@ -2,17 +2,15 @@ package com.adhafajri.moviecatalog.ui.detail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.adhafajri.moviecatalog.data.source.local.entity.CreditEntity
-import com.adhafajri.moviecatalog.data.source.local.entity.PersonWithJob
+import com.adhafajri.moviecatalog.data.source.local.entity.PersonEntity
 import com.adhafajri.moviecatalog.databinding.ItemsPersonBinding
 
 class
 DetailPersonAdapter : RecyclerView.Adapter<DetailPersonAdapter.PersonViewHolder>() {
-    private var listPersons = ArrayList<PersonWithJob>()
+    private var listPersons = ArrayList<PersonEntity>()
 
-    fun setPersons(persons: ArrayList<PersonWithJob>) {
+    fun setPersons(persons: ArrayList<PersonEntity>?) {
         if (persons == null) return
         this.listPersons.clear()
         this.listPersons.addAll(persons)
@@ -33,19 +31,9 @@ DetailPersonAdapter : RecyclerView.Adapter<DetailPersonAdapter.PersonViewHolder>
 
     class PersonViewHolder(private val binding: ItemsPersonBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(person: PersonWithJob) {
+        fun bind(person: PersonEntity) {
             with(binding) {
-                tvName.text = person.person.name
-
-                val detailJobAdapter = DetailJobAdapter()
-                detailJobAdapter.setJobs(person.jobs)
-
-                with(rvJob) {
-                    layoutManager =
-                        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                    setHasFixedSize(true)
-                    adapter = detailJobAdapter
-                }
+                tvName.text = person.name
             }
         }
     }

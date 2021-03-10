@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adhafajri.moviecatalog.databinding.FragmentTvShowBinding
 import com.adhafajri.moviecatalog.viewmodel.ViewModelFactory
-import com.dicoding.academies.vo.Status
+import com.adhafajri.moviecatalog.vo.Status
 
 class TvShowFragment : Fragment() {
     private var fragmentTvShowBinding: FragmentTvShowBinding? = null
@@ -28,7 +28,7 @@ class TvShowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
-            val factory = ViewModelFactory.getInstance()
+            val factory = ViewModelFactory.getInstance(activity!!)
             val viewModel = ViewModelProvider(
                 this,
                 factory
@@ -92,7 +92,8 @@ class TvShowFragment : Fragment() {
         })
 
         with(binding?.rvTvShowPopular) {
-            this?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            this?.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             this?.setHasFixedSize(true)
             this?.adapter = popularTvShowAdapter
         }

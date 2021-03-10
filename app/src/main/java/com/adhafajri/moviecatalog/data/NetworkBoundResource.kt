@@ -5,7 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import com.adhafajri.moviecatalog.data.source.remote.ApiResponse
 import com.adhafajri.moviecatalog.data.source.remote.StatusResponse
 import com.adhafajri.moviecatalog.utils.AppExecutors
-import com.dicoding.academies.vo.Resource
+import com.adhafajri.moviecatalog.vo.Resource
 
 abstract class NetworkBoundResource<ResultType, RequestType>(private val mExecutors: AppExecutors) {
 
@@ -52,13 +52,13 @@ abstract class NetworkBoundResource<ResultType, RequestType>(private val mExecut
             when (response.status) {
                 StatusResponse.SUCCESS ->
                     mExecutors.diskIO().execute {
-                    saveCallResult(response.body)
-                    mExecutors.mainThread().execute {
-                        result.addSource(loadFromDB()) { newData ->
-                            result.value = Resource.success(newData)
+                        saveCallResult(response.body)
+                        mExecutors.mainThread().execute {
+                            result.addSource(loadFromDB()) { newData ->
+                                result.value = Resource.success(newData)
+                            }
                         }
                     }
-                }
                 StatusResponse.EMPTY -> mExecutors.mainThread().execute {
                     result.addSource(loadFromDB()) { newData ->
                         result.value = Resource.success(newData)

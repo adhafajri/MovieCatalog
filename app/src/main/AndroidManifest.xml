@@ -12,8 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieCatalog">
         <activity
+            android:name=".ui.home.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.detail.DetailActivity"
-            android:label="Detail Catalog"
+            android:label="@string/detail_catalog"
             android:parentActivityName=".ui.home.HomeActivity"
             android:theme="@style/Theme.MovieCatalog.NoActionBar">
             <meta-data
@@ -21,13 +29,12 @@
                 android:value=".ui.home.HomeActivity" />
         </activity>
         <activity
-            android:name=".ui.home.HomeActivity"
-            android:theme="@style/Theme.MovieCatalog.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:name=".ui.favorite.FavoriteActivity"
+            android:label="@string/favorites_catalog"
+            android:parentActivityName=".ui.home.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.home.HomeActivity" />
         </activity>
     </application>
 

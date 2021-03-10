@@ -16,7 +16,7 @@ object Constant {
     const val SITE_YOUTUBE = "YouTube"
     const val SITE_VIMEO = "Vimeo"
 
-    const val TRAILER = "trailer"
+    const val TRAILER = "Trailer"
 
     const val YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v="
     const val VIMEO_VIDEO_URL = "https://vimeo.com/"
@@ -28,4 +28,6 @@ object Constant {
     const val EXTRA_OVERVIEW = "extra_overview"
 
     const val GRID_SPAN_COUNT = 2
+
+    const val SERVICE_LATENCY_IN_MILLIS: Long = 2000
 }

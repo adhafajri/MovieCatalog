@@ -5,11 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
-import com.adhafajri.moviecatalog.data.source.local.entity.JobEntity
 import com.adhafajri.moviecatalog.data.source.local.entity.PersonEntity
 
 @Database(
-    entities = [CatalogEntity::class, PersonEntity::class, JobEntity::class],
+    entities = [CatalogEntity::class, PersonEntity::class],
     version = 1,
     exportSchema = false
 )
@@ -28,6 +27,7 @@ abstract class CatalogDatabase : RoomDatabase() {
                             context.applicationContext,
                             CatalogDatabase::class.java, "Catalogs.db"
                         )
+                            .fallbackToDestructiveMigration()
                             .build()
                     }
                 }

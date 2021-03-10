@@ -1,250 +1,21 @@
-//package com.adhafajri.moviecatalog.data
-//
-//import androidx.lifecycle.LiveData
-//import androidx.lifecycle.MutableLiveData
-//import com.adhafajri.moviecatalog.data.source.local.entity.*
-//import com.adhafajri.moviecatalog.data.source.remote.RemoteDataSource
-//import com.adhafajri.moviecatalog.data.source.remote.response.CreditResponse
-//import com.adhafajri.moviecatalog.data.source.remote.response.MoviesResponse
-//import com.adhafajri.moviecatalog.data.source.remote.response.TvShowResponse
-//import com.adhafajri.moviecatalog.data.source.remote.response.VideoResponse
-//import com.adhafajri.moviecatalog.utils.Constant
-//import java.util.*
-//import kotlin.collections.ArrayList
-//
-//class CatalogRepository private constructor(private val remoteDataSource: RemoteDataSource) :
-//    CatalogDataSource {
-//
-//    companion object {
-//        @Volatile
-//        private var instance: CatalogRepository? = null
-//
-//        fun getInstance(remoteData: RemoteDataSource): CatalogRepository =
-//            instance ?: synchronized(this) {
-//                instance ?: CatalogRepository(remoteData)
-//            }
-//    }
-//
-//    override fun getPopularMovies(): LiveData<List<CatalogEntity>> {
-//        val catalogResults = MutableLiveData<List<CatalogEntity>>()
-//        remoteDataSource.getPopularMovies(object : RemoteDataSource.LoadMoviesCallback {
-//            override fun onAllMoviesReceived(moviesResponse: List<MoviesResponse>?) {
-//                val catalogList = ArrayList<CatalogEntity>()
-//                moviesResponse?.forEach {
-//                    with(it) {
-//                        val catalog = CatalogEntity(
-//                            id,
-//                            Constant.MOVIE,
-//                            title,
-//                            "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
-//                            overview
-//                        )
-//                        catalogList.add(catalog)
-//                    }
-//                }
-//                catalogResults.postValue(catalogList)
-//            }
-//
-//        })
-//        return catalogResults
-//    }
-//
-//    override fun getPopularTvShows(): LiveData<List<CatalogEntity>> {
-//        val catalogResults = MutableLiveData<List<CatalogEntity>>()
-//        remoteDataSource.getPopularTvShows(object : RemoteDataSource.LoadTvShowsCallback {
-//            override fun onAllTvShowsReceived(tvShowResponse: List<TvShowResponse>?) {
-//                val catalogList = ArrayList<CatalogEntity>()
-//                tvShowResponse?.forEach {
-//                    with(it) {
-//                        val catalog = CatalogEntity(
-//                            id,
-//                            Constant.TV_SHOW,
-//                            name,
-//                            "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
-//                            overview
-//                        )
-//                        catalogList.add(catalog)
-//                    }
-//                }
-//                catalogResults.postValue(catalogList)
-//            }
-//        })
-//        return catalogResults
-//    }
-//
-//    override fun getUpcomingMovies(): LiveData<List<CatalogEntity>> {
-//        val catalogResults = MutableLiveData<List<CatalogEntity>>()
-//        remoteDataSource.getUpcomingMovies(object : RemoteDataSource.LoadMoviesCallback {
-//            override fun onAllMoviesReceived(moviesResponse: List<MoviesResponse>?) {
-//                val catalogList = ArrayList<CatalogEntity>()
-//                moviesResponse?.forEach {
-//                    with(it) {
-//                        val catalog = CatalogEntity(
-//                            id,
-//                            Constant.MOVIE,
-//                            title,
-//                            "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
-//                            overview
-//                        )
-//                        catalogList.add(catalog)
-//                    }
-//                }
-//                catalogResults.postValue(catalogList)
-//            }
-//        })
-//        return catalogResults
-//    }
-//
-//    override fun getTodayAiringTvShows(): LiveData<List<CatalogEntity>> {
-//        val catalogResults = MutableLiveData<List<CatalogEntity>>()
-//        remoteDataSource.getTodayAiringTvShows(object : RemoteDataSource.LoadTvShowsCallback {
-//            override fun onAllTvShowsReceived(tvShowResponse: List<TvShowResponse>?) {
-//                val catalogList = ArrayList<CatalogEntity>()
-//                tvShowResponse?.forEach {
-//                    with(it) {
-//                        val catalog = CatalogEntity(
-//                            id,
-//                            Constant.TV_SHOW,
-//                            name,
-//                            "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
-//                            overview
-//                        )
-//                        catalogList.add(catalog)
-//                    }
-//                }
-//                catalogResults.postValue(catalogList)
-//            }
-//        })
-//        return catalogResults
-//    }
-//
-//    override fun getMovieVideo(movieId: String): LiveData<VideoEntity> {
-//        val videoResult = MutableLiveData<VideoEntity>()
-//        remoteDataSource.getMovieVideos(movieId, object : RemoteDataSource.LoadVideosCallback {
-//            override fun onAllVideosReceived(videosResponse: List<VideoResponse>?) {
-//                val videoList = ArrayList<VideoEntity>()
-//                videosResponse?.forEach {
-//                    with(it) {
-//                        val video = VideoEntity(
-//                            id,
-//                            key,
-//                            site
-//                        )
-//                        videoList.add(video)
-//                    }
-//                }
-//
-//                val youtubeVideo = videoList.find { it.site == Constant.SITE_YOUTUBE }
-//                videoResult.postValue(youtubeVideo ?: videoList.first())
-//            }
-//        })
-//        return videoResult
-//    }
-//
-//    override fun getTvShowVideo(tvShowId: String): LiveData<VideoEntity> {
-//        val videoResult = MutableLiveData<VideoEntity>()
-//        remoteDataSource.getTvShowVideos(tvShowId, object : RemoteDataSource.LoadVideosCallback {
-//            override fun onAllVideosReceived(videosResponse: List<VideoResponse>?) {
-//                val videoList = ArrayList<VideoEntity>()
-//                videosResponse?.forEach {
-//                    with(it) {
-//                        val video = VideoEntity(
-//                            id,
-//                            key,
-//                            site
-//                        )
-//                        videoList.add(video)
-//                    }
-//                }
-//
-//                val youtubeVideo = videoList.find { it.site == Constant.SITE_YOUTUBE }
-//                videoResult.postValue(youtubeVideo ?: videoList.first())
-//            }
-//        })
-//        return videoResult
-//    }
-//
-//    override fun getMovieCredits(movieId: String): LiveData<List<CreditEntity>> {
-//        val creditResults = MutableLiveData<List<CreditEntity>>()
-//        remoteDataSource.getMovieCredits(movieId, object : RemoteDataSource.LoadCreditsCallback {
-//            override fun onAllCreditsReceived(creditResponse: List<CreditResponse>?) {
-//                val personsList = ArrayList<PersonEntity>()
-//                val jobList = ArrayList<JobEntity>()
-//                creditResponse?.forEach {
-//                    with(it) {
-//                        val person = PersonEntity(
-//                            id,
-//                            name
-//                        )
-//                        personsList.add(person)
-//
-//                        val job = JobEntity(
-//                            "job${id}",
-//                            id,
-//                            job
-//                        )
-//                        jobList.add(job)
-//                    }
-//                }
-//
-//                val personWithJobList = ArrayList<PersonWithJob>()
-//                jobList.groupBy { it.personId }.entries.map { (id, it) ->
-//                    personWithJobList.add(
-//                        PersonWithJob(PersonEntity(id, it.first().), it)
-//                    )
-//                }
-//
-//                creditResults.postValue(creditList)
-//            }
-//        })
-//        return creditResults
-//    }
-//
-//    override fun getTvShowCredits(tvShowId: String): LiveData<List<CreditEntity>> {
-//        val creditResults = MutableLiveData<List<CreditEntity>>()
-//        remoteDataSource.getTvShowCredits(tvShowId, object : RemoteDataSource.LoadCreditsCallback {
-//            override fun onAllCreditsReceived(creditResponse: List<CreditResponse>?) {
-//                val personsJobList = ArrayList<PersonJobEntity>()
-//                creditResponse?.forEach {
-//                    with(it) {
-//                        val person = PersonJobEntity(
-//                            id,
-//                            name,
-//                            job
-//                        )
-//                        personsJobList.add(person)
-//                    }
-//                }
-//
-//                val creditList = ArrayList<CreditEntity>()
-//                personsJobList.groupBy { it.personId }.entries.map { (id, it) ->
-//                    creditList.add(
-//                        CreditEntity(id, PersonEntity(id, it.first().name), it)
-//                    )
-//                }
-//
-//                creditResults.postValue(creditList)
-//            }
-//        })
-//        return creditResults
-//    }
-//}
-
 package com.adhafajri.moviecatalog.data
 
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.adhafajri.moviecatalog.data.source.local.LocalDataSource
-import com.adhafajri.moviecatalog.data.source.local.entity.*
+import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
+import com.adhafajri.moviecatalog.data.source.local.entity.CatalogWithPerson
+import com.adhafajri.moviecatalog.data.source.local.entity.PersonEntity
 import com.adhafajri.moviecatalog.data.source.remote.ApiResponse
 import com.adhafajri.moviecatalog.data.source.remote.RemoteDataSource
 import com.adhafajri.moviecatalog.data.source.remote.response.CreditResponse
 import com.adhafajri.moviecatalog.data.source.remote.response.MoviesResponse
+import com.adhafajri.moviecatalog.data.source.remote.response.TvShowResponse
 import com.adhafajri.moviecatalog.data.source.remote.response.VideoResponse
 import com.adhafajri.moviecatalog.utils.AppExecutors
 import com.adhafajri.moviecatalog.utils.Constant
-import com.dicoding.academies.vo.Resource
+import com.adhafajri.moviecatalog.vo.Resource
 
 class CatalogRepository private constructor(
     private val remoteDataSource: RemoteDataSource,
@@ -295,9 +66,10 @@ class CatalogRepository private constructor(
                         val catalog = CatalogEntity(
                             id,
                             Constant.MOVIE,
-                            Constant.UPCOMING_MOVIES,
+                            Constant.POPULAR_MOVIES,
                             title,
-                            posterPath, overview
+                            "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
+                            overview
                         )
                         catalogList.add(catalog)
                     }
@@ -326,7 +98,7 @@ class CatalogRepository private constructor(
                 data == null || data.isEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<MoviesResponse>>> =
-                remoteDataSource.getPopularMovies()
+                remoteDataSource.getUpcomingMovies()
 
             override fun saveCallResult(data: List<MoviesResponse>) {
                 val catalogList = ArrayList<CatalogEntity>()
@@ -337,7 +109,8 @@ class CatalogRepository private constructor(
                             Constant.MOVIE,
                             Constant.UPCOMING_MOVIES,
                             title,
-                            posterPath, overview
+                            "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
+                            overview
                         )
                         catalogList.add(catalog)
                     }
@@ -348,11 +121,85 @@ class CatalogRepository private constructor(
     }
 
     override fun getPopularTvShows(): LiveData<Resource<PagedList<CatalogEntity>>> {
-        TODO("Not yet implemented")
+        return object :
+            NetworkBoundResource<PagedList<CatalogEntity>, List<TvShowResponse>>(appExecutors) {
+            override fun loadFromDB(): LiveData<PagedList<CatalogEntity>> {
+                val config = PagedList.Config.Builder()
+                    .setEnablePlaceholders(false)
+                    .setInitialLoadSizeHint(4)
+                    .setPageSize(4)
+                    .build()
+                return LivePagedListBuilder(
+                    localDataSource.getPopularTvShowCatalogs(),
+                    config
+                ).build()
+            }
+
+            override fun shouldFetch(data: PagedList<CatalogEntity>?): Boolean =
+                data == null || data.isEmpty()
+
+            override fun createCall(): LiveData<ApiResponse<List<TvShowResponse>>> =
+                remoteDataSource.getPopularTvShows()
+
+            override fun saveCallResult(data: List<TvShowResponse>) {
+                val catalogList = ArrayList<CatalogEntity>()
+                data.forEach {
+                    with(it) {
+                        val catalog = CatalogEntity(
+                            id,
+                            Constant.TV_SHOW,
+                            Constant.POPULAR_TV_SHOWS,
+                            name,
+                            "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
+                            overview
+                        )
+                        catalogList.add(catalog)
+                    }
+                    localDataSource.insertCatalogs(catalogList)
+                }
+            }
+        }.asLiveData()
     }
 
     override fun getTodayAiringTvShows(): LiveData<Resource<PagedList<CatalogEntity>>> {
-        TODO("Not yet implemented")
+        return object :
+            NetworkBoundResource<PagedList<CatalogEntity>, List<TvShowResponse>>(appExecutors) {
+            override fun loadFromDB(): LiveData<PagedList<CatalogEntity>> {
+                val config = PagedList.Config.Builder()
+                    .setEnablePlaceholders(false)
+                    .setInitialLoadSizeHint(4)
+                    .setPageSize(4)
+                    .build()
+                return LivePagedListBuilder(
+                    localDataSource.getTodayAiringTvShowCatalogs(),
+                    config
+                ).build()
+            }
+
+            override fun shouldFetch(data: PagedList<CatalogEntity>?): Boolean =
+                data == null || data.isEmpty()
+
+            override fun createCall(): LiveData<ApiResponse<List<TvShowResponse>>> =
+                remoteDataSource.getTodayAiringTvShows()
+
+            override fun saveCallResult(data: List<TvShowResponse>) {
+                val catalogList = ArrayList<CatalogEntity>()
+                data.forEach {
+                    with(it) {
+                        val catalog = CatalogEntity(
+                            id,
+                            Constant.TV_SHOW,
+                            Constant.TODAY_AIRING_TV_SHOWS,
+                            name,
+                            "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
+                            overview
+                        )
+                        catalogList.add(catalog)
+                    }
+                    localDataSource.insertCatalogs(catalogList)
+                }
+            }
+        }.asLiveData()
     }
 
     override fun getCatalogWithPersons(
@@ -377,7 +224,6 @@ class CatalogRepository private constructor(
 
             override fun saveCallResult(data: List<CreditResponse>) {
                 val personList = ArrayList<PersonEntity>()
-                val jobList = ArrayList<JobEntity>()
                 data.forEach {
                     with(it) {
                         val person = PersonEntity(
@@ -386,106 +232,14 @@ class CatalogRepository private constructor(
                             name
                         )
                         personList.add(person)
-                        val job = JobEntity(
-                            "job$id",
-                            id,
-                            job
-                        )
-                        jobList.add(job)
                     }
-                    localDataSource.insertPersons(personList)
-                    localDataSource.insertJobs(jobList)
-                }
-            }
-        }.asLiveData()
-    }
 
-    override fun getAllPersonByCatalogId(
-        catalogId: String,
-        type: String
-    ): LiveData<Resource<List<PersonEntity>>> {
-        return object :
-            NetworkBoundResource<List<PersonEntity>, List<CreditResponse>>(appExecutors) {
-            override fun loadFromDB(): LiveData<List<PersonEntity>> =
-                localDataSource.getAllPersonsByCatalogId(catalogId)
-
-            override fun shouldFetch(data: List<PersonEntity>?): Boolean =
-                data == null || data.isEmpty()
-
-            override fun createCall(): LiveData<ApiResponse<List<CreditResponse>>> {
-                return if (type == Constant.MOVIE) {
-                    remoteDataSource.getMovieCredits(catalogId)
-                } else {
-                    remoteDataSource.getTvShowCredits(catalogId)
-                }
-            }
-
-            override fun saveCallResult(data: List<CreditResponse>) {
-                val personList = ArrayList<PersonEntity>()
-                val jobList = ArrayList<JobEntity>()
-                data.forEach {
-                    with(it) {
-                        val person = PersonEntity(
-                            id,
-                            catalogId,
-                            name
-                        )
-                        personList.add(person)
-                        val job = JobEntity(
-                            "job$id",
-                            id,
-                            job
-                        )
-                        jobList.add(job)
+                    val persons = ArrayList<PersonEntity>()
+                    personList.groupBy { person -> person.personId }.entries.map { person ->
+                        persons.addAll(person.value)
                     }
-                    localDataSource.insertPersons(personList)
-                    localDataSource.insertJobs(jobList)
-                }
-            }
-        }.asLiveData()
-    }
 
-    override fun getPersonWithJobs(
-        catalogId: String,
-        personId: String,
-        type: String
-    ): LiveData<Resource<PersonWithJob>> {
-        return object :
-            NetworkBoundResource<PersonWithJob, List<CreditResponse>>(appExecutors) {
-            override fun loadFromDB(): LiveData<PersonWithJob> =
-                localDataSource.getPersonWithJobs(personId)
-
-            override fun shouldFetch(data: PersonWithJob?): Boolean =
-                data?.jobs == null || data.jobs.isEmpty()
-
-            override fun createCall(): LiveData<ApiResponse<List<CreditResponse>>> {
-                return if (type == Constant.MOVIE) {
-                    remoteDataSource.getMovieCredits(catalogId)
-                } else {
-                    remoteDataSource.getTvShowCredits(catalogId)
-                }
-            }
-
-            override fun saveCallResult(data: List<CreditResponse>) {
-                val personList = ArrayList<PersonEntity>()
-                val jobList = ArrayList<JobEntity>()
-                data.forEach {
-                    with(it) {
-                        val person = PersonEntity(
-                            id,
-                            catalogId,
-                            name
-                        )
-                        personList.add(person)
-                        val job = JobEntity(
-                            "job$id",
-                            id,
-                            job
-                        )
-                        jobList.add(job)
-                    }
-                    localDataSource.insertPersons(personList)
-                    localDataSource.insertJobs(jobList)
+                    localDataSource.insertPersons(persons)
                 }
             }
         }.asLiveData()
@@ -497,7 +251,7 @@ class CatalogRepository private constructor(
                 localDataSource.getCatalogWithVideo(catalogId)
 
             override fun shouldFetch(data: CatalogEntity?): Boolean =
-                data?.videoEntity == null
+                data?.videoEntity?.videoUrl == null
 
             override fun createCall(): LiveData<ApiResponse<List<VideoResponse>>> {
                 return if (type == Constant.MOVIE) {
@@ -515,8 +269,12 @@ class CatalogRepository private constructor(
                     else -> null
                 }
 
-                val videoUrl = "$videoSite${videoResponse?.key}"
-                localDataSource.updateVideo(videoUrl, catalogId)
+                var videoUrl: String? = null
+                if (videoSite != null && videoResponse != null) {
+                    videoUrl = "$videoSite${videoResponse.key}"
+                }
+
+                videoUrl?.let { localDataSource.updateVideo(it, catalogId) }
             }
         }.asLiveData()
     }
@@ -524,261 +282,11 @@ class CatalogRepository private constructor(
     override fun getFavoriteCatalogs(): LiveData<PagedList<CatalogEntity>> {
         val config = PagedList.Config.Builder()
             .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint(4)
-            .setPageSize(4)
+            .setPageSize(6)
             .build()
         return LivePagedListBuilder(localDataSource.getFavoriteCatalogs(), config).build()
     }
 
     override fun setCatalogFavorite(catalog: CatalogEntity, state: Boolean) =
         appExecutors.diskIO().execute { localDataSource.setCatalogFavorite(catalog, state) }
-
-
-//    override fun getMovieCredits(movieId: String): LiveData<Resource<PagedList<CreditEntity>>> {
-//        return object :
-//            NetworkBoundResource<PagedList<PersonEntity>, List<CreditResponse>>(appExecutors)  {
-//            override fun loadFromDB(): LiveData<PagedList<PersonEntity>> {
-//                val config = PagedList.Config.Builder()
-//                    .setEnablePlaceholders(false)
-//                    .setInitialLoadSizeHint(4)
-//                    .setPageSize(4)
-//                    .build()
-//                return LivePagedListBuilder(
-//                    localDataSource.getPersonWithJobs(),
-//                    config
-//                ).build()
-//            }
-//
-//            override fun shouldFetch(data: PagedList<CatalogEntity>?): Boolean =
-//                data == null || data.isEmpty()
-//
-//            override fun createCall(): LiveData<ApiResponse<List<MoviesResponse>>> =
-//                remoteDataSource.getPopularMovies()
-//
-//            override fun saveCallResult(data: List<MoviesResponse>) {
-//                val catalogList = ArrayList<CatalogEntity>()
-//                data.forEach {
-//                    with(it) {
-//                        val catalog = CatalogEntity(
-//                            id,
-//                            Constant.MOVIE,
-//                            Constant.UPCOMING_MOVIES,
-//                            title,
-//                            posterPath, overview
-//                        )
-//                        catalogList.add(catalog)
-//                    }
-//                    localDataSource.insertCatalogs(catalogList)
-//                }
-//            }
-//        }.asLiveData()
-//    }
-//
-//    override fun getMovieVideo(movieId: String): LiveData<Resource<VideoEntity>> {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun getPopularTvShows(): LiveData<Resource<PagedList<CatalogEntity>>> {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun getTodayAiringTvShows(): LiveData<Resource<PagedList<CatalogEntity>>> {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun getTvShowCredits(tvShowId: String): LiveData<Resource<PagedList<CreditEntity>>> {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun getTvShowVideo(tvShowId: String): LiveData<Resource<VideoEntity>> {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun getFavoritedCatalogs(): LiveData<PagedList<CatalogEntity>> {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun setCatalogFavorite(catalog: CatalogEntity, state: Boolean) {
-//        TODO("Not yet implemented")
-//    }
-
-//    override fun getPopularTvShows(): LiveData<Resource<PagedList<CatalogEntity>>> {
-//        val catalogResults = MutableLiveData<List<CatalogEntity>>()
-//        remoteDataSource.getPopularTvShows(object : RemoteDataSource.LoadTvShowsCallback {
-//            override fun onAllTvShowsReceived(tvShowResponse: List<TvShowResponse>?) {
-//                val catalogList = ArrayList<CatalogEntity>()
-//                tvShowResponse?.forEach {
-//                    with(it) {
-//                        val catalog = CatalogEntity(
-//                            id,
-//                            Constant.TV_SHOW,
-//                            name,
-//                            "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
-//                            overview
-//                        )
-//                        catalogList.add(catalog)
-//                    }
-//                }
-//                catalogResults.postValue(catalogList)
-//            }
-//        })
-//        return catalogResults
-//    }
-//
-//    override fun getUpcomingMovies(): LiveData<List<CatalogEntity>> {
-//        val catalogResults = MutableLiveData<List<CatalogEntity>>()
-//        remoteDataSource.getUpcomingMovies(object : RemoteDataSource.LoadMoviesCallback {
-//            override fun onAllMoviesReceived(moviesResponse: List<MoviesResponse>?) {
-//                val catalogList = ArrayList<CatalogEntity>()
-//                moviesResponse?.forEach {
-//                    with(it) {
-//                        val catalog = CatalogEntity(
-//                            id,
-//                            Constant.MOVIE,
-//                            title,
-//                            "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
-//                            overview
-//                        )
-//                        catalogList.add(catalog)
-//                    }
-//                }
-//                catalogResults.postValue(catalogList)
-//            }
-//        })
-//        return catalogResults
-//    }
-//
-//    override fun getTodayAiringTvShows(): LiveData<List<CatalogEntity>> {
-//        val catalogResults = MutableLiveData<List<CatalogEntity>>()
-//        remoteDataSource.getTodayAiringTvShows(object : RemoteDataSource.LoadTvShowsCallback {
-//            override fun onAllTvShowsReceived(tvShowResponse: List<TvShowResponse>?) {
-//                val catalogList = ArrayList<CatalogEntity>()
-//                tvShowResponse?.forEach {
-//                    with(it) {
-//                        val catalog = CatalogEntity(
-//                            id,
-//                            Constant.TV_SHOW,
-//                            name,
-//                            "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
-//                            overview
-//                        )
-//                        catalogList.add(catalog)
-//                    }
-//                }
-//                catalogResults.postValue(catalogList)
-//            }
-//        })
-//        return catalogResults
-//    }
-//
-//    override fun getMovieVideo(movieId: String): LiveData<VideoEntity> {
-//        val videoResult = MutableLiveData<VideoEntity>()
-//        remoteDataSource.getMovieVideos(movieId, object : RemoteDataSource.LoadVideosCallback {
-//            override fun onAllVideosReceived(videosResponse: List<VideoResponse>?) {
-//                val videoList = ArrayList<VideoEntity>()
-//                videosResponse?.forEach {
-//                    with(it) {
-//                        val video = VideoEntity(
-//                            id,
-//                            key,
-//                            site
-//                        )
-//                        videoList.add(video)
-//                    }
-//                }
-//
-//                val youtubeVideo = videoList.find { it.site == Constant.SITE_YOUTUBE }
-//                videoResult.postValue(youtubeVideo ?: videoList.first())
-//            }
-//        })
-//        return videoResult
-//    }
-//
-//    override fun getTvShowVideo(tvShowId: String): LiveData<VideoEntity> {
-//        val videoResult = MutableLiveData<VideoEntity>()
-//        remoteDataSource.getTvShowVideos(tvShowId, object : RemoteDataSource.LoadVideosCallback {
-//            override fun onAllVideosReceived(videosResponse: List<VideoResponse>?) {
-//                val videoList = ArrayList<VideoEntity>()
-//                videosResponse?.forEach {
-//                    with(it) {
-//                        val video = VideoEntity(
-//                            id,
-//                            key,
-//                            site
-//                        )
-//                        videoList.add(video)
-//                    }
-//                }
-//
-//                val youtubeVideo = videoList.find { it.site == Constant.SITE_YOUTUBE }
-//                videoResult.postValue(youtubeVideo ?: videoList.first())
-//            }
-//        })
-//        return videoResult
-//    }
-//
-//    override fun getMovieCredits(movieId: String): LiveData<List<CreditEntity>> {
-//        val creditResults = MutableLiveData<List<CreditEntity>>()
-//        remoteDataSource.getMovieCredits(movieId, object : RemoteDataSource.LoadCreditsCallback {
-//            override fun onAllCreditsReceived(creditResponse: List<CreditResponse>?) {
-//                val personsList = ArrayList<PersonEntity>()
-//                val jobList = ArrayList<JobEntity>()
-//                creditResponse?.forEach {
-//                    with(it) {
-//                        val person = PersonEntity(
-//                            id,
-//                            name
-//                        )
-//                        personsList.add(person)
-//
-//                        val job = JobEntity(
-//                            "job${id}",
-//                            id,
-//                            job
-//                        )
-//                        jobList.add(job)
-//                    }
-//                }
-//
-//                val personWithJobList = ArrayList<PersonWithJob>()
-//                jobList.groupBy { it.personId }.entries.map { (id, it) ->
-//                    personWithJobList.add(
-//                        PersonWithJob(PersonEntity(id, it.first().), it)
-//                    )
-//                }
-//
-//                creditResults.postValue(creditList)
-//            }
-//        })
-//        return creditResults
-//    }
-//
-//    override fun getTvShowCredits(tvShowId: String): LiveData<List<CreditEntity>> {
-//        val creditResults = MutableLiveData<List<CreditEntity>>()
-//        remoteDataSource.getTvShowCredits(tvShowId, object : RemoteDataSource.LoadCreditsCallback {
-//            override fun onAllCreditsReceived(creditResponse: List<CreditResponse>?) {
-//                val personsJobList = ArrayList<PersonJobEntity>()
-//                creditResponse?.forEach {
-//                    with(it) {
-//                        val person = PersonJobEntity(
-//                            id,
-//                            name,
-//                            job
-//                        )
-//                        personsJobList.add(person)
-//                    }
-//                }
-//
-//                val creditList = ArrayList<CreditEntity>()
-//                personsJobList.groupBy { it.personId }.entries.map { (id, it) ->
-//                    creditList.add(
-//                        CreditEntity(id, PersonEntity(id, it.first().name), it)
-//                    )
-//                }
-//
-//                creditResults.postValue(creditList)
-//            }
-//        })
-//        return creditResults
-//    }
 }

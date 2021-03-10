@@ -8,4 +8,7 @@
     <string name="airing_today">Airing Today</string>
     <string name="upcoming_movies">Upcoming Movies</string>
     <string name="overview">Overview</string>
+    <string name="favorite">Favorite</string>
+    <string name="detail_catalog">Detail Catalog</string>
+    <string name="favorites_catalog">Favorites Catalog</string>
 </resources>

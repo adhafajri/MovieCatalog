@@ -7,6 +7,4 @@ data class CreditResponse(
     var id: String,
     @SerializedName("name")
     var name: String,
-    @SerializedName("job")
-    var job: String,
 )

@@ -3,15 +3,12 @@ package com.adhafajri.moviecatalog.ui.tvshow
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.paging.PagedList
 import com.adhafajri.moviecatalog.data.CatalogRepository
 import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
-import com.adhafajri.moviecatalog.utils.Constant
-import com.adhafajri.moviecatalog.utils.api.APIClient
-import com.adhafajri.moviecatalog.utils.api.APIHelper
-import com.adhafajri.moviecatalog.utils.api.APIInterface
+import com.adhafajri.moviecatalog.vo.Resource
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import junit.framework.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -23,7 +20,6 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class TvShowViewModelTest {
     private lateinit var viewModel: TvShowViewModel
-    private lateinit var apiHelper: APIHelper
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -32,70 +28,49 @@ class TvShowViewModelTest {
     private lateinit var catalogRepository: CatalogRepository
 
     @Mock
-    private lateinit var observer: Observer<List<CatalogEntity>>
+    private lateinit var observer: Observer<Resource<PagedList<CatalogEntity>>>
+
+    @Mock
+    private lateinit var pagedList: PagedList<CatalogEntity>
 
     @Before
     fun setUp() {
         viewModel = TvShowViewModel(catalogRepository)
-        apiHelper = APIHelper(APIClient().getClient().create(
-            APIInterface::class.java))
     }
 
     @Test
     fun getPopularTvShows() {
-        val tvShows = apiHelper.getPopularTvShows()
-        val tvShowList = ArrayList<CatalogEntity>()
-        val catalogList = MutableLiveData<List<CatalogEntity>>()
-        tvShows?.forEach {
-            with(it) {
-                val catalog = CatalogEntity(
-                    id,
-                    Constant.TV_SHOW,
-                    name,
-                    "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
-                    overview
-                )
-                tvShowList.add(catalog)
-            }
-        }
-        catalogList.value = tvShowList
+        val dummyCourses = Resource.success(pagedList)
+        Mockito.`when`(dummyCourses.data?.size).thenReturn(5)
 
-        Mockito.`when`(catalogRepository.getPopularTvShows()).thenReturn(catalogList)
-        val catalogEntities = viewModel.getPopularTvShows().value
+        val catalog = MutableLiveData<Resource<PagedList<CatalogEntity>>>()
+        catalog.value = dummyCourses
+
+        Mockito.`when`(catalogRepository.getPopularTvShows()).thenReturn(catalog)
+        val catalogEntities = viewModel.getPopularTvShows().value?.data
         verify(catalogRepository).getPopularTvShows()
-        assertNotNull(catalogEntities)
-        assertEquals(catalogList.value?.size, catalogEntities?.size)
+        Assert.assertNotNull(catalogEntities)
+        Assert.assertEquals(catalog.value?.data?.size, catalogEntities?.size)
 
         viewModel.getPopularTvShows().observeForever(observer)
-        verify(observer).onChanged(tvShowList)
+        verify(observer).onChanged(dummyCourses)
     }
 
     @Test
     fun getTodayAiringTvShows() {
-        val tvShows = apiHelper.getTodayAiringTvShows()
-        val tvShowList = ArrayList<CatalogEntity>()
-        val catalogList = MutableLiveData<List<CatalogEntity>>()
-        tvShows?.forEach {
-            with(it) {
-                val catalog = CatalogEntity(
-                    id,
-                    Constant.TV_SHOW,
-                    name,
-                    "${Constant.THE_MOVIE_DB_IMG_URL}${posterPath}",
-                    overview
-                )
-                tvShowList.add(catalog)
-            }
-        }
-        catalogList.value = tvShowList
+        val dummyCourses = Resource.success(pagedList)
+        Mockito.`when`(dummyCourses.data?.size).thenReturn(5)
 
-        Mockito.`when`(catalogRepository.getTodayAiringTvShows()).thenReturn(catalogList)
-        val catalogEntities = viewModel.getTodayAiringTvShows().value
+        val catalog = MutableLiveData<Resource<PagedList<CatalogEntity>>>()
+        catalog.value = dummyCourses
+
+        Mockito.`when`(catalogRepository.getTodayAiringTvShows()).thenReturn(catalog)
+        val catalogEntities = viewModel.getTodayAiringTvShows().value?.data
         verify(catalogRepository).getTodayAiringTvShows()
-        assertNotNull(catalogEntities)
-        assertEquals(catalogList.value?.size, catalogEntities?.size)
+        Assert.assertNotNull(catalogEntities)
+        Assert.assertEquals(catalog.value?.data?.size, catalogEntities?.size)
 
         viewModel.getTodayAiringTvShows().observeForever(observer)
-        verify(observer).onChanged(tvShowList)
+        verify(observer).onChanged(dummyCourses)
     }
 }

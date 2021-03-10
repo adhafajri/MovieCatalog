@@ -1,4 +1,4 @@
-package com.adhafajri.moviecatalog.ui.movie
+package com.adhafajri.moviecatalog.ui.favorite
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -15,7 +15,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
 class
-MovieAdapter : PagedListAdapter<CatalogEntity, MovieAdapter.CatalogViewHolder>(DIFF_CALLBACK) {
+FavoriteAdapter :
+    PagedListAdapter<CatalogEntity, FavoriteAdapter.CatalogViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CatalogEntity>() {

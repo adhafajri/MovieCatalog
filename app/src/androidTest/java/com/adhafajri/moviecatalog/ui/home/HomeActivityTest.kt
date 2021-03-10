@@ -3,6 +3,7 @@ package com.adhafajri.moviecatalog.ui.home
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
@@ -10,9 +11,11 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import com.adhafajri.moviecatalog.R
 import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
 import com.adhafajri.moviecatalog.utils.Constant
+import com.adhafajri.moviecatalog.utils.EspressoIdlingResource
 import com.adhafajri.moviecatalog.utils.api.APIClient
 import com.adhafajri.moviecatalog.utils.api.APIHelper
 import com.adhafajri.moviecatalog.utils.api.APIInterface
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -21,9 +24,18 @@ class HomeActivityTest {
 
     @Before
     fun setup() {
-        apiHelper = APIHelper(APIClient().getClient().create(
-            APIInterface::class.java))
+        apiHelper = APIHelper(
+            APIClient().getClient().create(
+                APIInterface::class.java
+            )
+        )
         ActivityScenario.launch(HomeActivity::class.java)
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.idlingResource)
+    }
+
+    @After
+    fun tearDown() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.idlingResource)
     }
 
     @Test
@@ -31,7 +43,7 @@ class HomeActivityTest {
         val popularMovies = apiHelper.getPopularMovies()
         onView(withId(R.id.rv_movie_popular)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_movie_popular)).perform(
-            popularMovies?.let {
+            popularMovies.let {
                 RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
                     it.size
                 )
@@ -41,7 +53,7 @@ class HomeActivityTest {
         val upcomingMovies = apiHelper.getUpcomingMovies()
         onView(withId(R.id.rv_movie_upcoming)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_movie_upcoming)).perform(
-            upcomingMovies?.let {
+            upcomingMovies.let {
                 RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
                     it.size
                 )
@@ -55,7 +67,7 @@ class HomeActivityTest {
         onView(withText(R.string.tv_shows)).perform(click())
         onView(withId(R.id.rv_tv_show_popular)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_tv_show_popular)).perform(
-            popularTvShows?.let {
+            popularTvShows.let {
                 RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
                     it.size
                 )
@@ -65,7 +77,7 @@ class HomeActivityTest {
         val todayAiringTvShows = apiHelper.getTodayAiringTvShows()
         onView(withId(R.id.rv_tv_show_airing)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_tv_show_airing)).perform(
-            todayAiringTvShows?.let {
+            todayAiringTvShows.let {
                 RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
                     it.size
                 )
@@ -84,12 +96,13 @@ class HomeActivityTest {
         )
 
         val dummyMovieCatalog = ArrayList<CatalogEntity>()
-        movies?.forEach {
+        movies.forEach {
             with(it) {
                 dummyMovieCatalog.add(
                     CatalogEntity(
                         id,
                         Constant.MOVIE,
+                        null,
                         title,
                         posterPath,
                         overview
@@ -111,7 +124,7 @@ class HomeActivityTest {
 
         onView(withId(R.id.rv_person)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_person)).perform(
-            moviePerson?.let {
+            moviePerson.let {
                 RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
                     it.size
                 )
@@ -124,9 +137,9 @@ class HomeActivityTest {
 
     @Test
     fun loadDetailTvShowCatalog() {
-        val tvShows = apiHelper.getPopularTvShows()
+        val tvShows = apiHelper.getTodayAiringTvShows()
         onView(withText(R.string.tv_shows)).perform(click())
-        onView(withId(R.id.rv_tv_show_popular)).perform(
+        onView(withId(R.id.rv_tv_show_airing)).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
                 0,
                 click()
@@ -134,12 +147,13 @@ class HomeActivityTest {
         )
 
         val dummyTvShowCatalog = ArrayList<CatalogEntity>()
-        tvShows?.forEach {
+        tvShows.forEach {
             with(it) {
                 dummyTvShowCatalog.add(
                     CatalogEntity(
                         id,
-                        Constant.MOVIE,
+                        Constant.TV_SHOW,
+                        null,
                         name,
                         posterPath,
                         overview
@@ -161,7 +175,7 @@ class HomeActivityTest {
 
         onView(withId(R.id.rv_person)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_person)).perform(
-            tvShowPerson?.let {
+            tvShowPerson.let {
                 RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
                     it.size
                 )
@@ -170,5 +184,67 @@ class HomeActivityTest {
 
         onView(withId(R.id.scrollView)).perform(swipeDown())
         onView(withId(R.id.btn_trailer)).perform(click())
+    }
+
+    @Test
+    fun loadBookmarks() {
+        val tvShows = apiHelper.getPopularTvShows()
+        onView(withText(R.string.tv_shows)).perform(click())
+        onView(withId(R.id.rv_tv_show_popular)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
+
+        onView(withId(R.id.fab_favorite)).perform(click())
+        onView(isRoot()).perform(pressBack())
+        onView(withId(R.id.action_favorite)).perform(click())
+        onView(withId(R.id.rv_catalog)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_catalog)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
+
+        val dummyTvShowCatalog = ArrayList<CatalogEntity>()
+        tvShows.forEach {
+            with(it) {
+                dummyTvShowCatalog.add(
+                    CatalogEntity(
+                        id,
+                        Constant.TV_SHOW,
+                        null,
+                        name,
+                        posterPath,
+                        overview
+                    )
+                )
+            }
+        }
+        val tvShowPerson = apiHelper.getMovieCredits(dummyTvShowCatalog.first().catalogId)
+
+        onView(withId(R.id.tv_catalog_title)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_catalog_title)).check(matches(withText(dummyTvShowCatalog.first().title)))
+
+        onView(withId(R.id.img_poster)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.tv_overview)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_overview_text)).check(matches(withText(dummyTvShowCatalog.first().overview)))
+
+        onView(withId(R.id.scrollView)).perform(swipeUp())
+
+        onView(withId(R.id.rv_person)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_person)).perform(
+            tvShowPerson.let {
+                RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                    it.size
+                )
+            }
+        )
+
+        onView(withId(R.id.fab_favorite)).perform(click())
+        onView(isRoot()).perform(pressBack())
     }
 }

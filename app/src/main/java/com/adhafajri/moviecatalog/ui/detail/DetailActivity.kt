@@ -4,36 +4,30 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.adhafajri.moviecatalog.R
 import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
 import com.adhafajri.moviecatalog.data.source.local.entity.PersonEntity
-import com.adhafajri.moviecatalog.data.source.local.entity.PersonWithJob
 import com.adhafajri.moviecatalog.databinding.ActivityDetailBinding
 import com.adhafajri.moviecatalog.utils.Constant
 import com.adhafajri.moviecatalog.viewmodel.ViewModelFactory
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.dicoding.academies.vo.Status
+import com.adhafajri.moviecatalog.vo.Status
 
 class DetailActivity : AppCompatActivity() {
-//    private lateinit var detailContentBinding: ContentDetailBinding
-
-//    private lateinit var catalog: CatalogEntity
-
     private var activityDetailBinding: ActivityDetailBinding? = null
 
     private val mainBinding get() = activityDetailBinding
     private val contentBinding get() = activityDetailBinding?.detailContent
 
     private lateinit var viewModel: DetailViewModel
-    private var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +38,8 @@ class DetailActivity : AppCompatActivity() {
         setSupportActionBar(mainBinding?.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val factory = ViewModelFactory.getInstance()
-        val viewModel = ViewModelProvider(
+        val factory = ViewModelFactory.getInstance(this)
+        viewModel = ViewModelProvider(
             this,
             factory
         )[DetailViewModel::class.java]
@@ -54,32 +48,17 @@ class DetailActivity : AppCompatActivity() {
         if (extras != null) {
             val catalogId = extras.getString(Constant.EXTRA_CATALOG_ID)
             val type = extras.getString(Constant.EXTRA_TYPE)
-//        val title = extras?.getString(Constant.EXTRA_TITLE)
-//        val posterPath = extras?.getString(Constant.EXTRA_POSTER_PATH)
-//        val overview = extras?.getString(Constant.EXTRA_OVERVIEW)
 
             if (catalogId != null && type != null) {
                 viewModel.setSelectedCatalog(catalogId, type)
-                loadDetails(viewModel)
+                loadDetails()
             }
 
-//        if (catalogId != null && type != null && title != null && posterPath != null && overview != null) {
-////            catalog = CatalogEntity(
-////                catalogId,
-////                type,
-////                null
-////                title,
-////                posterPath,
-////                overview,
-////            )
-//        }
-
-//        viewModel.setSelectedCatalog(catalog.catalogId, catalog.type)
 
         }
     }
 
-    private fun loadDetails(viewModel: DetailViewModel) {
+    private fun loadDetails() {
         val catalogPerson = viewModel.catalogPerson
         catalogPerson.observe(this, Observer { catalogWithPersonResource ->
             if (catalogWithPersonResource != null) {
@@ -90,8 +69,24 @@ class DetailActivity : AppCompatActivity() {
                         val catalog = catalogWithPersonResource.data.catalog
                         loadCatalogData(catalog)
 
+                        val state = catalog.isFavorite
+                        setupFavoriteButton(state)
+
+
                         val persons = catalogWithPersonResource.data.persons
-                        loadPersonData(persons)
+                        val personList = ArrayList<PersonEntity>()
+                        persons.forEach {
+                            with(it) {
+                                val person = PersonEntity(
+                                    personId,
+                                    catalogId,
+                                    name
+                                )
+                                personList.add(person)
+                            }
+
+                        }
+                        loadPersonData(personList)
                     }
                     Status.ERROR -> {
                         contentBinding?.pbDetails?.visibility = View.GONE
@@ -108,66 +103,61 @@ class DetailActivity : AppCompatActivity() {
         val catalogVideoUrl = viewModel.videoUrl
         catalogVideoUrl.observe(this, Observer { catalogVideoUrlResource ->
             if (catalogVideoUrlResource?.data != null) {
-                contentBinding?.btnTrailer?.visibility = View.VISIBLE
-                val videoUrl = catalogVideoUrlResource.data.videoEntity?.videoUrl
+                when (catalogVideoUrlResource.status) {
+                    Status.LOADING -> mainBinding?.fabFavorite?.visibility = View.GONE
+                    Status.SUCCESS -> {
+                        contentBinding?.btnTrailer?.visibility = View.VISIBLE
 
-                contentBinding?.btnTrailer?.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl))
-                    startActivity(intent)
+                        val videoUrl = catalogVideoUrlResource.data.videoEntity?.videoUrl
+                        contentBinding?.btnTrailer?.setOnClickListener {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl))
+                            startActivity(intent)
+                        }
+                    }
+                    Status.ERROR -> {
+                        Toast.makeText(
+                            applicationContext,
+                            "Failed to get trailer",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
+
             }
         })
-//        loadCatalogData(it)
-
-//        viewModel.getCredits()?.observe(this, {
-//            loadPersonData(it)
-//            detailContentBinding.pbDetails.visibility = View.GONE
-//        })
-
-//        viewModel.getVideo()?.observe(this, {
-//            with(it) {
-//                val link = when (site) {
-//                    Constant.SITE_YOUTUBE -> "${Constant.YOUTUBE_VIDEO_URL}$key"
-//                    Constant.SITE_VIMEO -> "${Constant.VIMEO_VIDEO_URL}$key"
-//                    else -> null
-//                }
-//
-//                if (link != null) {
-//                    detailContentBinding.btnTrailer.setOnClickListener {
-//                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-//                        startActivity(intent)
-//                    }
-//                }
-//            }
-//        })
     }
 
-    private fun loadPersonData(persons: List<PersonEntity>) {
-        val detailAdapter = DetailPersonAdapter()
-        val personWithJobs = ArrayList<PersonWithJob>()
-        persons.forEach {
-            with(it) {
-                viewModel.getPersonWithJobs(personId)
-                    .observe(this@DetailActivity, Observer { personWithJobResource ->
-                        if (personWithJobResource != null) {
-                            when (personWithJobResource.status) {
-                                Status.SUCCESS -> if (personWithJobResource.data != null) {
-                                    personWithJobs.add(personWithJobResource.data)
-                                }
-                                else -> {
-                                    Toast.makeText(
-                                        applicationContext,
-                                        "Failed to get details",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                        }
-                    })
-            }
+    private fun setupFavoriteButton(state: Boolean) {
+        setFavoriteState(state)
+
+        mainBinding?.fabFavorite?.setOnClickListener {
+            viewModel.setFavorite()
+        }
+    }
+
+    private fun setFavoriteState(state: Boolean) {
+        if (state) {
+            mainBinding?.fabFavorite?.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_favorited
+                )
+            )
+        } else {
+            mainBinding?.fabFavorite?.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_favorite_outline
+                )
+            )
         }
 
-        detailAdapter.setPersons(personWithJobs)
+    }
+
+    private fun loadPersonData(persons: ArrayList<PersonEntity>) {
+        val detailAdapter = DetailPersonAdapter()
+
+        detailAdapter.setPersons(persons)
         detailAdapter.notifyDataSetChanged()
         with(contentBinding?.rvPerson) {
             this?.isNestedScrollingEnabled = false
