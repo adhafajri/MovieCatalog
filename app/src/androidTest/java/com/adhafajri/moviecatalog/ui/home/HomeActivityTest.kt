@@ -87,7 +87,20 @@ class HomeActivityTest {
 
     @Test
     fun loadDetailMovieCatalog() {
-        val movies = apiHelper.getPopularMovies()
+        val movies = apiHelper.getPopularMovies().first()
+        var dummyMovieCatalog: CatalogEntity
+        with(movies) {
+            dummyMovieCatalog = CatalogEntity(
+                id,
+                Constant.MOVIE,
+                null,
+                title,
+                posterPath,
+                overview
+            )
+        }
+        val moviePerson = apiHelper.getMovieCredits(dummyMovieCatalog.catalogId)
+
         onView(withId(R.id.rv_movie_popular)).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
                 0,
@@ -95,30 +108,13 @@ class HomeActivityTest {
             )
         )
 
-        val dummyMovieCatalog = ArrayList<CatalogEntity>()
-        movies.forEach {
-            with(it) {
-                dummyMovieCatalog.add(
-                    CatalogEntity(
-                        id,
-                        Constant.MOVIE,
-                        null,
-                        title,
-                        posterPath,
-                        overview
-                    )
-                )
-            }
-        }
-        val moviePerson = apiHelper.getMovieCredits(dummyMovieCatalog.first().catalogId)
-
         onView(withId(R.id.tv_catalog_title)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_catalog_title)).check(matches(withText(dummyMovieCatalog.first().title)))
+        onView(withId(R.id.tv_catalog_title)).check(matches(withText(dummyMovieCatalog.title)))
 
         onView(withId(R.id.img_poster)).check(matches(isDisplayed()))
 
         onView(withId(R.id.tv_overview)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_overview_text)).check(matches(withText(dummyMovieCatalog.first().overview)))
+        onView(withId(R.id.tv_overview_text)).check(matches(withText(dummyMovieCatalog.overview)))
 
         onView(withId(R.id.scrollView)).perform(swipeUp())
 
@@ -137,7 +133,21 @@ class HomeActivityTest {
 
     @Test
     fun loadDetailTvShowCatalog() {
-        val tvShows = apiHelper.getTodayAiringTvShows()
+        val tvShows = apiHelper.getTodayAiringTvShows().first()
+        var dummyTvShowCatalog: CatalogEntity
+        with(tvShows) {
+            dummyTvShowCatalog =
+                CatalogEntity(
+                    id,
+                    Constant.TV_SHOW,
+                    null,
+                    name,
+                    posterPath,
+                    overview
+                )
+        }
+        val tvShowPerson = apiHelper.getMovieCredits(dummyTvShowCatalog.catalogId)
+
         onView(withText(R.string.tv_shows)).perform(click())
         onView(withId(R.id.rv_tv_show_airing)).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
@@ -146,30 +156,13 @@ class HomeActivityTest {
             )
         )
 
-        val dummyTvShowCatalog = ArrayList<CatalogEntity>()
-        tvShows.forEach {
-            with(it) {
-                dummyTvShowCatalog.add(
-                    CatalogEntity(
-                        id,
-                        Constant.TV_SHOW,
-                        null,
-                        name,
-                        posterPath,
-                        overview
-                    )
-                )
-            }
-        }
-        val tvShowPerson = apiHelper.getMovieCredits(dummyTvShowCatalog.first().catalogId)
-
         onView(withId(R.id.tv_catalog_title)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_catalog_title)).check(matches(withText(dummyTvShowCatalog.first().title)))
+        onView(withId(R.id.tv_catalog_title)).check(matches(withText(dummyTvShowCatalog.title)))
 
         onView(withId(R.id.img_poster)).check(matches(isDisplayed()))
 
         onView(withId(R.id.tv_overview)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_overview_text)).check(matches(withText(dummyTvShowCatalog.first().overview)))
+        onView(withId(R.id.tv_overview_text)).check(matches(withText(dummyTvShowCatalog.overview)))
 
         onView(withId(R.id.scrollView)).perform(swipeUp())
 
@@ -188,7 +181,22 @@ class HomeActivityTest {
 
     @Test
     fun loadBookmarks() {
-        val tvShows = apiHelper.getPopularTvShows()
+        val tvShows = apiHelper.getPopularTvShows().first()
+        var dummyTvShowCatalog: CatalogEntity
+        with(tvShows) {
+            dummyTvShowCatalog =
+                CatalogEntity(
+                    id,
+                    Constant.TV_SHOW,
+                    null,
+                    name,
+                    posterPath,
+                    overview
+                )
+        }
+        val tvShowPerson = apiHelper.getMovieCredits(dummyTvShowCatalog.catalogId)
+
+
         onView(withText(R.string.tv_shows)).perform(click())
         onView(withId(R.id.rv_tv_show_popular)).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
@@ -208,36 +216,22 @@ class HomeActivityTest {
             )
         )
 
-        val dummyTvShowCatalog = ArrayList<CatalogEntity>()
-        tvShows.forEach {
-            with(it) {
-                dummyTvShowCatalog.add(
-                    CatalogEntity(
-                        id,
-                        Constant.TV_SHOW,
-                        null,
-                        name,
-                        posterPath,
-                        overview
-                    )
-                )
-            }
-        }
-        val tvShowPerson = apiHelper.getMovieCredits(dummyTvShowCatalog.first().catalogId)
+
 
         onView(withId(R.id.tv_catalog_title)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_catalog_title)).check(matches(withText(dummyTvShowCatalog.first().title)))
+        onView(withId(R.id.tv_catalog_title)).check(matches(withText(dummyTvShowCatalog.title)))
 
         onView(withId(R.id.img_poster)).check(matches(isDisplayed()))
 
         onView(withId(R.id.tv_overview)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_overview_text)).check(matches(withText(dummyTvShowCatalog.first().overview)))
+        onView(withId(R.id.tv_overview_text)).check(matches(withText(dummyTvShowCatalog.overview)))
 
         onView(withId(R.id.scrollView)).perform(swipeUp())
 
         onView(withId(R.id.rv_person)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_person)).perform(
-            tvShowPerson.let {
+            tvShowPerson.let
+            {
                 RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
                     it.size
                 )

@@ -185,7 +185,6 @@ class DetailViewModelTest {
         verify(catalogObserver).onChanged(resource)
     }
 
-    //
     @Test
     fun getTvShowVideo() {
         val tvShowResponse = apiHelper.getPopularMovies().first()
