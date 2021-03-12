@@ -243,15 +243,6 @@ class DetailViewModelTest {
             )
         }
 
-        viewModel.setSelectedCatalog(movieCatalog.catalogId, Constant.MOVIE)
-
-        val expectedMovieCatalog = movieCatalog.copy(isFavorite = true)
-        doNothing().`when`(catalogDao).updateCatalog(expectedMovieCatalog)
-
-        localData.setCatalogFavorite(movieCatalog, true)
-
-        verify(catalogDao, times(1)).updateCatalog(expectedMovieCatalog)
-
         val tvShowResponse = apiHelper.getPopularTvShows().first()
         var tvShowCatalog: CatalogEntity
         with(tvShowResponse) {
@@ -260,13 +251,18 @@ class DetailViewModelTest {
             )
         }
 
+        viewModel.setSelectedCatalog(movieCatalog.catalogId, Constant.MOVIE)
+
+        val expectedMovieCatalog = movieCatalog.copy(isFavorite = true)
+        doNothing().`when`(catalogDao).updateCatalog(expectedMovieCatalog)
+        localData.setCatalogFavorite(movieCatalog, true)
+        verify(catalogDao, times(1)).updateCatalog(expectedMovieCatalog)
+
         viewModel.setSelectedCatalog(tvShowCatalog.catalogId, Constant.TV_SHOW)
 
         val expectedTvShowCatalog = tvShowCatalog.copy(isFavorite = true)
         doNothing().`when`(catalogDao).updateCatalog(expectedTvShowCatalog)
-
         localData.setCatalogFavorite(tvShowCatalog, true)
-
         verify(catalogDao, times(1)).updateCatalog(expectedTvShowCatalog)
     }
 }
