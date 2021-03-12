@@ -4,10 +4,12 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.adhafajri.moviecatalog.data.CatalogRepository
+import com.adhafajri.moviecatalog.data.source.local.LocalDataSource
 import com.adhafajri.moviecatalog.data.source.local.entity.CatalogEntity
 import com.adhafajri.moviecatalog.data.source.local.entity.CatalogWithPerson
 import com.adhafajri.moviecatalog.data.source.local.entity.PersonEntity
 import com.adhafajri.moviecatalog.data.source.local.entity.VideoEntity
+import com.adhafajri.moviecatalog.data.source.local.room.CatalogDao
 import com.adhafajri.moviecatalog.utils.Constant
 import com.adhafajri.moviecatalog.utils.api.APIClient
 import com.adhafajri.moviecatalog.utils.api.APIHelper
@@ -18,8 +20,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -187,15 +188,15 @@ class DetailViewModelTest {
 
     @Test
     fun getTvShowVideo() {
-        val tvShowResponse = apiHelper.getPopularMovies().first()
+        val tvShowResponse = apiHelper.getPopularTvShows().first()
         var catalogEntity: CatalogEntity
         with(tvShowResponse) {
             catalogEntity = CatalogEntity(
-                id, Constant.MOVIE, null, title, posterPath, overview
+                id, Constant.TV_SHOW, null, name, posterPath, overview
             )
         }
 
-        viewModel.setSelectedCatalog(catalogEntity.catalogId, Constant.MOVIE)
+        viewModel.setSelectedCatalog(catalogEntity.catalogId, Constant.TV_SHOW)
 
         val videoResponse =
             apiHelper.getMovieVideos(catalogEntity.catalogId).find { it.type == Constant.TRAILER }
@@ -220,12 +221,52 @@ class DetailViewModelTest {
         val catalog = MutableLiveData<Resource<CatalogEntity>>()
         catalog.value = resource
 
-        `when`(catalogRepository.getVideo(catalogEntity.catalogId, Constant.MOVIE)).thenReturn(
+        `when`(catalogRepository.getVideo(catalogEntity.catalogId, Constant.TV_SHOW)).thenReturn(
             catalog
         )
 
         viewModel.videoUrl.observeForever(catalogObserver)
 
         verify(catalogObserver).onChanged(resource)
+    }
+
+    @Test
+    fun setFavorite() {
+        val catalogDao = mock(CatalogDao::class.java)
+        val localData = LocalDataSource.getInstance(catalogDao)
+
+        val movieResponse = apiHelper.getPopularMovies().first()
+        var movieCatalog: CatalogEntity
+        with(movieResponse) {
+            movieCatalog = CatalogEntity(
+                id, Constant.MOVIE, null, title, posterPath, overview, false
+            )
+        }
+
+        viewModel.setSelectedCatalog(movieCatalog.catalogId, Constant.MOVIE)
+
+        val expectedMovieCatalog = movieCatalog.copy(isFavorite = true)
+        doNothing().`when`(catalogDao).updateCatalog(expectedMovieCatalog)
+
+        localData.setCatalogFavorite(movieCatalog, true)
+
+        verify(catalogDao, times(1)).updateCatalog(expectedMovieCatalog)
+
+        val tvShowResponse = apiHelper.getPopularTvShows().first()
+        var tvShowCatalog: CatalogEntity
+        with(tvShowResponse) {
+            tvShowCatalog = CatalogEntity(
+                id, Constant.TV_SHOW, null, name, posterPath, overview, false
+            )
+        }
+
+        viewModel.setSelectedCatalog(tvShowCatalog.catalogId, Constant.TV_SHOW)
+
+        val expectedTvShowCatalog = tvShowCatalog.copy(isFavorite = true)
+        doNothing().`when`(catalogDao).updateCatalog(expectedTvShowCatalog)
+
+        localData.setCatalogFavorite(tvShowCatalog, true)
+
+        verify(catalogDao, times(1)).updateCatalog(expectedTvShowCatalog)
     }
 }
